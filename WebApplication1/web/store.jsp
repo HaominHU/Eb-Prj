@@ -4,7 +4,7 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-//get  username;
+//获取  username;
 String username = (String)session.getAttribute("username");
 List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("listStore");
 

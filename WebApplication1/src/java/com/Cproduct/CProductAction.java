@@ -31,39 +31,19 @@ public class CProductAction extends HttpServlet {
 		super();
 	}
 
-	/**
-	 * Destruction of the servlet. <br>
-	 */
+	
 	public void destroy() {
 		super.destroy(); 
 	}
 
-	/**
-	 * The doGet method of the servlet. <br>
-	 *
-	 * This method is called when a form has its tag value method equals to get.
-	 * 
-	 * @param request the request send by the client to the server
-	 * @param response the response send by the server to the client
-	 * @throws ServletException if an error occurred
-	 * @throws IOException if an error occurred
-	 */
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		this.doPost(request, response);
 	}
 
-	/**
-	 * The doPost method of the servlet. <br>
-	 *
-	 * This method is called when a form has its tag value method equals to post.
-	 * 
-	 * @param request the request send by the client to the server
-	 * @param response the response send by the server to the client
-	 * @throws ServletException if an error occurred
-	 * @throws IOException if an error occurred
-	 */
+	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -86,11 +66,21 @@ public class CProductAction extends HttpServlet {
 			viewProduct(request,response);
 		}else if (action_flag.equals("rank")) {
 			rankProduct(request,response);
-		}else if (action_flag.equals("list")) {
-			listProduct(request,response);
-		}else if (action_flag.equals("update")) {
-			updateNumber(request,response);
+		}else if (action_flag.equals("nosearch")) {
+			novelSearch(request,response);
 		}
+        else if (action_flag.equals("edsearch")) {
+			educationSearch(request,response);
+		}
+        else if (action_flag.equals("bisearch")) {
+			biographySearch(request,response);
+		}
+        else if(action_flag.equals("checkout")) {
+			addShopcart(request,response);
+            //checkOut(request,response);
+        }
+
+
 		
 		
 		out.flush();
@@ -99,9 +89,9 @@ public class CProductAction extends HttpServlet {
 
 	private void viewProduct(HttpServletRequest request,
 			HttpServletResponse response) {
-		String proid = request.getParameter("proid");
-		Map<String, Object> map = service.viewProduct(proid);
-		request.setAttribute("productMap", map);
+		String bookid = request.getParameter("bookid");
+		Map<String, Object> map = service.viewProduct(bookid);
+		request.setAttribute("bookDetail", map);
 		try {
 			request.getRequestDispatcher("/viewProduct.jsp").forward(request, response);
 		} catch (Exception e) {
@@ -110,20 +100,43 @@ public class CProductAction extends HttpServlet {
 		
 	}
         
+
         private void addToCart(HttpServletRequest request,
-			HttpServletResponse response) {
-		// auto-generated method stub
+			HttpServletResponse response) {    
+		//add in Shopping cart table
+      
+		String[] ids = request.getParameterValues("ids");
                 
+//                for(int i=0;i<ids.length;i++){
+//                System.out.println(i +   "s" +ids[i]);
+//                }
+		List<Map<String,Object>> map = service.addToCart(ids);
+
+		request.setAttribute("bookCart", map);
+		//boolean flag1 = service.addinScart(params1);
+		 try {
+		// 	if(flag1){
+		 	request.getRequestDispatcher("/shoppingcart.jsp").forward(request, response);
+		// 	}
+                        
+		 } catch (Exception e) {
+		 	e.printStackTrace();
+		 } 
+		
+	}
+        
+        private void checkOut(HttpServletRequest request,
+			HttpServletResponse response) {
                 
                 
 		String[] ids = request.getParameterValues("ids");
                 
-                for(int i=0;i<ids.length;i++){
-                System.out.println(i +   "s" +ids[i]);
-                }
-		List<Map<String,Object>> map = service.addToCart(ids);
+//                for(int i=0;i<ids.length;i++){
+//                System.out.println(i +   "s" +ids[i]);
+//                }
+		List<Map<String,Object>> map = service.checkOut(ids);
 
-		request.setAttribute("CProduct", map);
+		request.setAttribute("checkOut", map);
 		try {
 			request.getRequestDispatcher("/cart.jsp").forward(request, response);
                         
@@ -133,43 +146,54 @@ public class CProductAction extends HttpServlet {
 		
 	}
 
+		private void addShopcart(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException,IOException{
+		String path = request.getContextPath();
+		boolean flag1 = false ;
+		List<Object> params1 = new ArrayList<Object>();
+		String key = UUIDTools.getUUID();
+        String username=request.getParameter("username");
+        String[] bookname=request.getParameterValues("ids");
+		try{
+
+			for(int i = 0; i<bookname.length; i++){
+				params1.add(key);
+			    params1.add(username);
+            	params1.add(bookname[i]);
+				flag1 = service.addShopcart(params1);
+            }
+			
+			if(flag1){
+				//response.sendRedirect(path+"/shoppingcart.jsp");
+				//request.getRequestDispatcher("/shoppingcart.jsp").forward(request,response);
+				checkOut(request, response);
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
 	private void searchProduct(HttpServletRequest request,
 			HttpServletResponse response) {
 		
 		String bookName = request.getParameter("bookname");	
-		String pageNum = request.getParameter("pageNum");
-		//System.out.println("参数 pageNum :"+pageNum);
+//		
 		if (bookName == null) {
 			bookName = "";
 		}
 		
 		
 		
-		int totalRecord = service.getItemCount(bookName); //get record
-		int currentPage = 1;
-		DividePage dividePage = new DividePage(50, totalRecord);//from page 1
-		if (pageNum != null) {
-			
-			
-			currentPage = Integer.parseInt(pageNum);
-			
-			dividePage.setCurrentPage(currentPage);
-		}
-		
-		//mark start page
-		int start = dividePage.fromIndex();
-		//show records
-		int end = dividePage.toIndex();		
-		
-		System.out.println("currentPageNum :"+ dividePage.getCurrentPage() +", start = "+start +", end = "+end);
+
 		
 		List<Map<String, Object>> list = null;
 		try {
-			list = service.listProduct(bookName , start , end);
-			request.setAttribute("listProduct", list);
-			request.setAttribute("dividePage", dividePage);
+			list = service.listProduct(bookName);
+			request.setAttribute("listBook", list);
 			request.setAttribute("bookName",bookName );
-			request.getRequestDispatcher("/searchProduct.jsp").forward(request, response);
+			request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
 		} catch (Exception e) {
 			// exception
 			e.printStackTrace();
@@ -177,84 +201,54 @@ public class CProductAction extends HttpServlet {
 		
 	}
 
-	private void listProduct(HttpServletRequest request,
-			HttpServletResponse response) {
-		String bookName = request.getParameter("bookname");	
-		String pageNum = request.getParameter("pageNum");
-		System.out.println("参数 pageNum :"+pageNum);
+//	private void listProduct(HttpServletRequest request,
+//			HttpServletResponse response) {
+//		String productName = request.getParameter("proname");	
+//	
+//		
+//		if (productName == null) {
+//			productName = "";
+//		}
+//		
+//		
+//		
+//		int totalRecord = service.getItemCount(productName); 
+//		
+//		
+//		List<Map<String, Object>> list = null;
+//		try {
+//			list = service.listProduct(productName);
+//			request.setAttribute("listProduct", list);
+//			
+//			request.setAttribute("productName",productName );
+//			request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}		
+//		
+//	}
+        
+        private void rankProduct(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException{
+            
+                String bookName = request.getParameter("bookname");	
+		
 		if (bookName == null) {
 			bookName = "";
 		}
 		
 		
 		
-		int totalRecord = service.getItemCount(bookName); 
-		int currentPage = 1;
-		DividePage dividePage = new DividePage(5, totalRecord);
-		if (pageNum != null) {
-			
-			
-			currentPage = Integer.parseInt(pageNum);
-			
-			dividePage.setCurrentPage(currentPage);
-		}
 		
 		
-		int start = dividePage.fromIndex();
-		
-		int end = dividePage.toIndex();		
-		
-		System.out.println("currentPageNum :"+ dividePage.getCurrentPage() +", start = "+start +", end = "+end);
 		
 		List<Map<String, Object>> list = null;
 		try {
-			list = service.listProduct(bookName , start , end);
-			request.setAttribute("listProduct", list);
-			request.setAttribute("dividePage", dividePage);
+			list = service.rankProduct(bookName);
+			request.setAttribute("listBook", list);
+			
 			request.setAttribute("bookName",bookName );
 			request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}		
-		
-	}
-        
-        private void rankProduct(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException{
-            
-        String productName = request.getParameter("proname");	
-		String pageNum = request.getParameter("pageNum");
-		System.out.println("参数 pageNum :"+pageNum);
-		if (productName == null) {
-			productName = "";
-		}
-		
-		
-		
-		int totalRecord = service.getItemCount(productName); 
-		int currentPage = 1;
-		DividePage dividePage = new DividePage(5, totalRecord);
-		if (pageNum != null) {
-			
-			
-			currentPage = Integer.parseInt(pageNum);
-			
-			dividePage.setCurrentPage(currentPage);
-		}
-		
-		int start = dividePage.fromIndex();
-		
-		int end = dividePage.toIndex();		
-		
-		System.out.println("currentPageNum :"+ dividePage.getCurrentPage() +", start = "+start +", end = "+end);
-		
-		List<Map<String, Object>> list = null;
-		try {
-			list = service.rankProduct(productName , start , end);
-			request.setAttribute("listProduct", list);
-			request.setAttribute("dividePage", dividePage);
-			request.setAttribute("productName",productName );
-			request.getRequestDispatcher("/rankProduct.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
@@ -314,59 +308,84 @@ public class CProductAction extends HttpServlet {
 		
 	}
         
-        private void updateNumber(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException{
+        private void novelSearch(HttpServletRequest request,
+			HttpServletResponse response) {
+		// TODO Auto-generated method stub
 		
-		String  path = request.getContextPath();		
-		DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
-		ServletFileUpload servletFileUpload = new ServletFileUpload(diskFileItemFactory);
-		servletFileUpload.setFileSizeMax(3*1024*1024);
-		servletFileUpload.setSizeMax(6*1024*1024);
-		List<FileItem> list = null;		
-		List<Object> params = new ArrayList<Object>();
-		//params.add(UUIDTools.getUUID()); 
-                
-                String ids=request.getParameter("proid");
-                String number=request.getParameter("number");
-                params.add(ids);
-                params.add(number);
-               
-		try {
-			//解析request的请求
-			//list = servletFileUpload.parseRequest(request);				
-			//取出所有表单的值，判断非文本字段和文本字段
-//			for(FileItem fileItem : list){
-//				if (fileItem.isFormField()) {//是文本字段
-//					String fileItemName = fileItem.getFieldName(); //获取 <input>控件的 名称
-//					String fileItemValue = fileItem.getString("utf-8");//获取<input>控件的值
-//					if (fileItemName.equals("number")) {
-//						params.add(fileItemValue); //参数传入 proname
-//					}else if (fileItemName.equals("proid")) {
-//						params.add(fileItemValue);////参数传入 proINV
-//					}					
-//				}		
-//			}
-			// 把产品加入数据库
-			boolean flag = service.updateNumber(params);
-			if (flag) {
-				
-				response.sendRedirect(path+"/Cmain.jsp");
-			}
-				
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		String bookType = "novel";	
+		
+		if (bookType == null) {
+			bookType = "";
 		}
 		
 		
 		
+		
+		
+		
+		List<Map<String, Object>> list = null;
+		try {
+			list = service.kindSearch(bookType);
+			request.setAttribute("listBook", list);
+			
+			
+			request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}		
+		
 	}
+         private void educationSearch(HttpServletRequest request,
+			HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		
+		String productName = "education";	
+		
+		if (productName == null) {
+			productName = "";
+		}
+		
+		List<Map<String, Object>> list = null;
+		try {
+			list = service.kindSearch(productName);
+			request.setAttribute("listBook", list);
+			
+			
+			request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}		
+		
+	}
+        private void biographySearch(HttpServletRequest request,
+			HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		
+		String productName = "biography";	
+		
+		
+		if (productName == null) {
+			productName = "";
+		}
 
-	/**
-	 * Initialization of the servlet. <br>
-	 *
-	 * @throws ServletException if an error occurs
-	 */
+		List<Map<String, Object>> list = null;
+		try {
+			list = service.kindSearch(productName);
+			request.setAttribute("listBook", list);
+			
+			
+			request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}		
+		
+	}
+        
+
+	
 	public void init() throws ServletException {
 		// Put your code here
 		service = new CProductDao();

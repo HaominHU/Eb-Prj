@@ -19,7 +19,7 @@ if(list==null){
 	dividePage = new DividePage(5,totalRecord,1);
 	int start = dividePage.fromIndex();
 	int end = dividePage.toIndex();
-	list = service.listProduct("", start, end);
+	list = service.listProduct("");
 }
 	
 %>
@@ -46,32 +46,8 @@ if(list==null){
 		th.submit();
 	}
 	
-	function first(){
-		
-		window.location.href = "<%=path%>/servlet/ProductAction?action_flag=search&pageNum=1";
-		
-	}
-	function next(){
-		
-		window.location.href = "<%=path%>/servlet/ProductAction?action_flag=search&pageNum=<%=dividePage.getCurrentPage()+1%>";		
 	
-	}
-	function forward(){
-		
-		window.location.href = "<%=path%>/servlet/ProductAction?action_flag=search&pageNum=<%=dividePage.getCurrentPage()-1%>";
-		
-	}
-	function end(){
-		
-		window.location.href = "<%=path%>/servlet/ProductAction?action_flag=search&pageNum=<%=dividePage.getPageCount() %>";
-			
-	}
 	
-	function changePage(currentPage){
-	
-		window.location.href = "<%=path%>/servlet/ProductAction?action_flag=search&pageNum="+currentPage;
-	
-	}
 	 
 	function selectAll(flag){
 		
@@ -175,20 +151,11 @@ if(list==null){
    			<tr>
    				<td colspan="2" align="center">
    					<button type="button" onclick="searchProduct()" >Search</button>
-   					<button type="button" onclick="javascript:location.href='<%=path %>/addProduct.jsp'">Add</button>   					
-   					<button type = "button" onclick = "javascript:location.href = '<%= path%>/updateProduct.jsp'">update</button>
+   					
    				</td>   				
    			</tr>
                         
-                        <tr>
-                                <td colspan="2" align="center">
-   					<button type="button" onclick="javascript:location.href='<%=path %>/changecus.jsp'">View/Change Customer</button>   					
-   					<button type="button" onclick="javascript:location.href='<%=path %>/aOrders.jsp'">View/Change Orders</button>   
-                                        <button type="button" onclick="javascript:location.href='<%=path %>/store.jsp'">View/ Update Store</button>  
-                                        <button type="button" onclick="javascript:location.href='<%=path %>/salesman.jsp'">View Salesman</button>
-                                        <button type="button" onclick="javascript:location.href='<%=path %>/mostorder.jsp'">ViewMostOrder</button>
-                                </td>   				
-   			</tr> 
+                        
    		</table>  	
    		</form>	
    			
@@ -256,41 +223,13 @@ if(list==null){
    		<td>
    			<button type="button" onclick="javascript:del();">Delete</button>
    			<button type="button" onclick="javascript:view();" >View</button>
+                        <button type="button" onclick="javascript:location.href='<%=path %>/addProduct.jsp'">Add</button>
+                        <button type = "button" onclick = "javascript:location.href = '<%= path%>/updateProduct.jsp'">update</button>
    		
    		</td>
    	</tr>
    	
-   	<tr>
-   		<td colspan="4" align="center">
-   			Total:<%=dividePage.getPageCount()  %>Pages    
-                        <a href="javascript:first();">1 Page</a>   
-   			<a href="javascript:forward();"> << </a> 
-   			<a href="javascript:next();"> >> </a> 
-   			<a href="javascript:end();">Last Page</a> 
-                        jump to<select name="select" onchange="changePage(this.value)">
-   			
-   			<%
-   			int pageCount = dividePage.getPageCount();
-   			if(pageCount>0){
-   			for(int i = 1 ; i<=pageCount;i++){%>
-   			
-   			<option value="<%=i %>" <%= (i==dividePage.getCurrentPage()?"selected":"")%>>  <%=i %>
-   			</option>
-   			
-   			<%			
-   			}
-   			
-   			}else{// 无记录
-   				%>
-   				<option value="1">1</option>   
-   			 <%}			
-   			
-   			%>
-   					
-   			</select>
-   		
-   		</td>
-   	</tr>
+
    			
    
    

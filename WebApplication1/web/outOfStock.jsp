@@ -7,7 +7,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>FBI Warning</title>
+        <title> Warning</title>
     </head>
     <body>
         <h1>Out Of Stock!</h1>

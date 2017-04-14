@@ -1,25 +1,22 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ page import="com.util.*" %>
-<%@ page import="com.product.*" %>
+<%@ page import="com.Cproduct.*" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-//get username;
+//获取 username;
 String username = (String)session.getAttribute("username");
+//获取从 servlet ProductActiion 中 传递的参数(数据库查询的结果)
+List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("listBook");
+// 获取 分页对象
 
-List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("listProduct");
-// get the page divid object
-DividePage dividePage = (DividePage) request.getAttribute("dividePage");
-
+// 获取查询的关键词
 String bookName = (String) request.getAttribute("bookName");
 if(list==null){
+	//第一次进 Cmain.jsp页面，默认加载所有的产品
+	CProductService service = new CProductDao();
 	
-	ProductService service = new ProductDao();
-	int totalRecord = service.getItemCount("");
-	dividePage = new DividePage(20,totalRecord,1);
-	int start = dividePage.fromIndex();
-	int end = dividePage.toIndex();
-	list = service.listProduct("", start, end);
+	list = service.listProduct("");
 }
 	
 %>
@@ -47,17 +44,18 @@ if(list==null){
    <tr>
    		<td align="left"><font size=2>welcome，<%=username%><br><a href="javascript:logout();">logout</a></font></td>
                 <button type="button" name="" value="" onclick="javascript:location.href='orders.jsp'">view order</button>
+                <button type="button" name="" value="" onclick="javascript:location.href='main.jsp'">my trade</button>
    </tr>
    	<tr>
    		<td align="center">
    		<form name = "form2" action="" method="post">
    		<table>
    			<tr>
-   				<td colspan="2">Search Book</td>
+   				<td colspan="2">search product</td>
    				
    			</tr>
    			<tr>
-   				<td >Book Name</td>
+   				<td >product name</td>
    				<td ><input type="text" name="bookname" value="<%= bookName!=null?bookName:"" %>"/></td>
    				
    			</tr>
@@ -65,16 +63,16 @@ if(list==null){
    			<tr>
    				<td colspan="2" align="center">
    					<button type="button" onclick="searchProduct()" >search</button>
-                    <button type="button" onclick="rank()" >rank by price</button>	
+                                        <button type="button" onclick="rank()" >rank by price</button>	
    				</td>   				
    			</tr>
-            <tr>
-                <td colspan = "2" align = "center">
-                	<button type = "button" onclick = "stProduct()">Strategy</button>
-                	<button type = "button" onclick = "adProduct()">Adventure</button>
-                	<button type = "button" onclick = "acProduct()">Action</button>
-            	</td>
-            </tr>
+                        <tr>
+                            <td colspan = "2" align = "center">
+                                <button type = "button" onclick = "novel()">novel</button>
+                                <button type = "button" onclick = "education()">education</button>
+                                <button type = "button" onclick = "biography()">biography</button>
+                            </td>
+                        </tr>
    		</table>  	
    		</form>	
    			
@@ -85,7 +83,7 @@ if(list==null){
    		<td height=50> </td>
    	</tr>
    	<tr>
-   		<td> result</td>
+   		<td> book</td>
    	</tr>
    	
    	<tr>
@@ -95,10 +93,13 @@ if(list==null){
    			<tr align="center">
    				<td width=10%><input type="checkbox" name="checkall" onclick="javascript:selectAll(this.checked);" /></td>
    				<td width=30%>bookname</td>
-   				<td width=30%>bookseller</td>
-   				<td>bookprice</td>
-                <td>bookkind</td>
+   				<td width=30%>price</td>
+   				<td>author</td>
+                <td>kind</td>
+                <td>seller</td>
+   			
    			</tr>
+                        
    			<%
    			if(list!=null && !list.isEmpty()){
    			
@@ -107,10 +108,12 @@ if(list==null){
    				<tr align="center">
    				<td width=10%><input type="checkbox" name="ids" value="<%=map.get("bookid") %>"/></td>
    				<td width=30%><%=map.get("bookname") %></td>
-				<td width=30%><%=map.get("bookseller")%></td>
    				<td width=30%><%=map.get("bookprice") %></td>
+   				<td><%=map.get("bookauthor") %></td>
                 <td><%=map.get("bookkind") %></td>
-   				<%}
+                <td><%=map.get("bookseller") %></td>
+
+				<%}
    			
    			
    			}else{%>
@@ -120,13 +123,11 @@ if(list==null){
    				<td width=30%></td>
    				<td width=30%></td>
    				<td></td>
-				<td></td>
    			
    			</tr><%
    			
    			}   			
    			 %>
-   			
    	
    			
    		
@@ -141,42 +142,12 @@ if(list==null){
    			
    			<button type="button" onclick="javascript:view();" >view</button>
                         <button type="button" onclick="javascript:addToCart();" >addtocart</button>
-                        <button type="button" onclick="javascript:updateNumber();" >updatenumber</button>
+                        
    		
    		</td>
    	</tr>
    	
-<!--   	<tr>
-   		<td colspan="4" align="center">
-   			all <%=dividePage.getPageCount()  %> page    
-   			<a href="javascript:first();">first page</a>   
-   			<a href="javascript:forward();">previous page</a> 
-   			<a href="javascript:next();">next page</a> 
-   			<a href="javascript:end();">last page</a> 
-   			skip to<select name="select" onchange="changePage(this.value)">
-   			
-   			<%
-   			int pageCount = dividePage.getPageCount();
-   			if(pageCount>0){
-   			for(int i = 1 ; i<=pageCount;i++){%>
-   			
-   			<option value="<%=i %>" <%= (i==dividePage.getCurrentPage()?"selected":"")%>>  <%=i %>
-   			</option>
-   			
-   			<%			
-   			}
-   			
-   			}else{
-   				%>
-   				<option value="1">1</option>   
-   			 <%}			
-   			
-   			%>
-   					
-   			</select>
-   		
-   		</td>
-   	</tr>-->
+
    			
    
    
@@ -198,50 +169,23 @@ if(list==null){
 		th.action="<%=path%>/servlet/CProductAction?action_flag=search";
 		th.submit();
 	}
-        function acProduct(){
+        function novel(){
 		var th = document.form2;
-		th.action="<%=path%>/servlet/ProductAction?action_flag=acsearch";
+		th.action="<%=path%>/servlet/ProductAction?action_flag=nosearch";
 		th.submit();
 	}
 	
-        function adProduct(){
+        function education(){
 		var th = document.form2;
-		th.action="<%=path%>/servlet/ProductAction?action_flag=adsearch";
+		th.action="<%=path%>/servlet/ProductAction?action_flag=edsearch";
 		th.submit();
 	}
-        function stProduct(){
+        function biography(){
 		var th = document.form2;
-		th.action="<%=path%>/servlet/ProductAction?action_flag=stsearch";
+		th.action="<%=path%>/servlet/ProductAction?action_flag=bisearch";
 		th.submit();
 	}
 	
-	function first(){
-		
-		window.location.href = "<%=path%>/servlet/CProductAction?action_flag=list&pageNum=1";
-		
-	}
-	function next(){
-		
-		window.location.href = "<%=path%>/servlet/CProductAction?action_flag=list&pageNum=<%=dividePage.getCurrentPage()+1%>";		
-	
-	}
-	function forward(){
-		
-		window.location.href = "<%=path%>/servlet/CProductAction?action_flag=list&pageNum=<%=dividePage.getCurrentPage()-1%>";
-		
-	}
-	function end(){
-		
-		window.location.href = "<%=path%>/servlet/CProductAction?action_flag=list&pageNum=<%=dividePage.getPageCount() %>";
-			
-	}
-	
-	function changePage(currentPage){
-	
-		window.location.href = "<%=path%>/servlet/CProductAction?action_flag=list&pageNum="+currentPage;
-	
-	}
-	 
 	function selectAll(flag){
 		
 		var ids = document.getElementsByName("ids");
@@ -289,12 +233,12 @@ if(list==null){
 		}
 		
 		var th = document.form1;
-		th.action="<%=path%>/servlet/CProductAction?action_flag=view&proid="+getSelectedValue();
+		th.action="<%=path%>/servlet/CProductAction?action_flag=view&bookid="+getSelectedValue();
 		th.submit();		
 	
 	}
         
-    function addToCart(){
+        function addToCart(){
 	
 		if(getSelectedCount()<1){
 			
@@ -309,20 +253,7 @@ if(list==null){
 	
 	}
         
-         function updateNumber(){
-	
-		if(getSelectedCount()<1){
-			
-			alert("please choose one item at least");
-			return;
-		
-		}
-		
-		var th = document.form1;
-		th.action="<%=path%>/servlet/CProductAction?action_flag=update&proid="+getSelectedValue();
-		th.submit();		
-	
-	}
+        
         
         function rank(){
             

@@ -82,18 +82,16 @@ public class ProductAction extends HttpServlet {
 			delProduct(request,response);
 		}else if (action_flag.equals("view")) {
 			viewProduct(request,response);
-		}else if (action_flag.equals("adsearch")) {
-			adlistProduct(request,response);
+		}else if (action_flag.equals("nosearch")) {
+			novelSearch(request,response);
 		}
-                else if (action_flag.equals("stsearch")) {
-			stlistProduct(request,response);
+                else if (action_flag.equals("edsearch")) {
+			educationSearch(request,response);
 		}
-                else if (action_flag.equals("acsearch")) {
-			aclistProduct(request,response);
+                else if (action_flag.equals("bisearch")) {
+			biographySearch(request,response);
 		}
-                else if (action_flag.equals("update")) {
-			updateProduct(request,response);
-		}
+                
 		
 		
 		out.flush();
@@ -145,39 +143,23 @@ public class ProductAction extends HttpServlet {
 			HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		
-		String bookName = request.getParameter("bookname");	
-		String pageNum = request.getParameter("pageNum");
-		System.out.println("参数 pageNum :"+pageNum);
-		if (bookName == null) {
-			bookName = "";
+		String productName = request.getParameter("proname");	
+		
+		if (productName == null) {
+			productName = "";
 		}
 		
 		
 		
-		int totalRecord = service.getItemCount(bookName); //获取总的记录数
-		int currentPage = 1;
-		DividePage dividePage = new DividePage(5, totalRecord);//默认第一页开始
-		if (pageNum != null) {
-			
-			
-			currentPage = Integer.parseInt(pageNum);
-			
-			dividePage.setCurrentPage(currentPage);
-		}
+	
 		
-		//记录从第几行开始
-		int start = dividePage.fromIndex();
-		//显示几条记录
-		int end = dividePage.toIndex();		
-		
-		System.out.println("currentPageNum :"+ dividePage.getCurrentPage() +", start = "+start +", end = "+end);
 		
 		List<Map<String, Object>> list = null;
 		try {
-			list = service.listProduct(bookName , start , end);
+			list = service.listProduct(productName);
 			request.setAttribute("listProduct", list);
-			request.setAttribute("dividePage", dividePage);
-			request.setAttribute("bookName",bookName );
+			
+			request.setAttribute("productName",productName );
 			request.getRequestDispatcher("/main.jsp").forward(request, response);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -244,43 +226,27 @@ public class ProductAction extends HttpServlet {
 		
 	}
         
-        private void adlistProduct(HttpServletRequest request,
+        private void novelSearch(HttpServletRequest request,
 			HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		
-		String productName = "adventure";	
-		String pageNum = request.getParameter("pageNum");
-		System.out.println("参数 pageNum :"+pageNum);
-		if (productName == null) {
-			productName = "";
+		String bookType = "novel";	
+		
+		if (bookType == null) {
+			bookType = "";
 		}
 		
 		
 		
-		int totalRecord = service.getItemCount1(productName); //获取总的记录数
-		int currentPage = 1;
-		DividePage dividePage = new DividePage(5, totalRecord);//默认第一页开始
-		if (pageNum != null) {
-			
-			
-			currentPage = Integer.parseInt(pageNum);
-			
-			dividePage.setCurrentPage(currentPage);
-		}
 		
-		//记录从第几行开始
-		int start = dividePage.fromIndex();
-		//显示几条记录
-		int end = dividePage.toIndex();		
 		
-		System.out.println("currentPageNum :"+ dividePage.getCurrentPage() +", start = "+start +", end = "+end);
 		
 		List<Map<String, Object>> list = null;
 		try {
-			list = service.aclistProduct(productName , start , end);
-			request.setAttribute("listProduct", list);
-			request.setAttribute("dividePage", dividePage);
-			request.setAttribute("productName",productName );
+			list = service.kindSearch(bookType);
+			request.setAttribute("listBook", list);
+			
+			
 			request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -288,43 +254,22 @@ public class ProductAction extends HttpServlet {
 		}		
 		
 	}
-         private void stlistProduct(HttpServletRequest request,
+         private void educationSearch(HttpServletRequest request,
 			HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		
-		String productName = "Strategy";	
-		String pageNum = request.getParameter("pageNum");
-		System.out.println("参数 pageNum :"+pageNum);
+		String productName = "education";	
+		
 		if (productName == null) {
 			productName = "";
 		}
 		
-		
-		
-		int totalRecord = service.getItemCount1(productName); //获取总的记录数
-		int currentPage = 1;
-		DividePage dividePage = new DividePage(5, totalRecord);//默认第一页开始
-		if (pageNum != null) {
-			
-			
-			currentPage = Integer.parseInt(pageNum);
-			
-			dividePage.setCurrentPage(currentPage);
-		}
-		
-		//记录从第几行开始
-		int start = dividePage.fromIndex();
-		//显示几条记录
-		int end = dividePage.toIndex();		
-		
-		System.out.println("currentPageNum :"+ dividePage.getCurrentPage() +", start = "+start +", end = "+end);
-		
 		List<Map<String, Object>> list = null;
 		try {
-			list = service.aclistProduct(productName , start , end);
-			request.setAttribute("listProduct", list);
-			request.setAttribute("dividePage", dividePage);
-			request.setAttribute("productName",productName );
+			list = service.kindSearch(productName);
+			request.setAttribute("listBook", list);
+			
+			
 			request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -332,43 +277,23 @@ public class ProductAction extends HttpServlet {
 		}		
 		
 	}
-        private void aclistProduct(HttpServletRequest request,
+        private void biographySearch(HttpServletRequest request,
 			HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		
-		String productName = "action";	
-		String pageNum = request.getParameter("pageNum");
-		System.out.println("参数 pageNum :"+pageNum);
+		String productName = "biography";	
+		
+		
 		if (productName == null) {
 			productName = "";
 		}
-		
-		
-		
-		int totalRecord = service.getItemCount1(productName); //获取总的记录数
-		int currentPage = 1;
-		DividePage dividePage = new DividePage(5, totalRecord);//默认第一页开始
-		if (pageNum != null) {
-			
-			
-			currentPage = Integer.parseInt(pageNum);
-			
-			dividePage.setCurrentPage(currentPage);
-		}
-		
-		//记录从第几行开始
-		int start = dividePage.fromIndex();
-		//显示几条记录
-		int end = dividePage.toIndex();		
-		
-		System.out.println("currentPageNum :"+ dividePage.getCurrentPage() +", start = "+start +", end = "+end);
-		
+
 		List<Map<String, Object>> list = null;
 		try {
-			list = service.aclistProduct(productName , start , end);
-			request.setAttribute("listProduct", list);
-			request.setAttribute("dividePage", dividePage);
-			request.setAttribute("productName",productName );
+			list = service.kindSearch(productName);
+			request.setAttribute("listBook", list);
+			
+			
 			request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -377,56 +302,9 @@ public class ProductAction extends HttpServlet {
 		
 	}
                 
-        private void updateProduct(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException{
-		//表单含有文件要提交
-		String  path = request.getContextPath();		
-		DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
-		ServletFileUpload servletFileUpload = new ServletFileUpload(diskFileItemFactory);
-		servletFileUpload.setFileSizeMax(3*1024*1024);//单个文件大小限制3M
-		servletFileUpload.setSizeMax(6*1024*1024);//上传文件总大小
-		List<FileItem> list = null;		
-		List<Object> params = new ArrayList<Object>();
-		//params.add(UUIDTools.getUUID()); // 参数传 product表的主键
-		try {
-			//解析request的请求
-			list = servletFileUpload.parseRequest(request);				
-			//取出所有表单的值，判断非文本字段和文本字段
-			for(FileItem fileItem : list){
-				if (fileItem.isFormField()) {//是文本字段
-					String fileItemName = fileItem.getFieldName(); //获取 <input>控件的 名称
-					String fileItemValue = fileItem.getString("utf-8");//获取<input>控件的值
-					if (fileItemName.equals("proinv")) {
-						params.add(fileItemValue); //参数传入 proname
-					}else if (fileItemName.equals("proname")) {
-						params.add(fileItemValue);////参数传入 proINV
-					}					
-				}		
-			}
-			// 把产品加入数据库
-			boolean flag = service.updateProduct(params);
-			if (flag) {
-				
-				response.sendRedirect(path+"/main.jsp");
-			}
-				
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		
-		
-		
-	}
-
-	/**
-	 * Initialization of the servlet. <br>
-	 *
-	 * @throws ServletException if an error occurs
-	 */
+        
 	public void init() throws ServletException {
-		// Put your code here
+		
 		service = new ProductDao();
 	}
 

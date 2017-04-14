@@ -36,22 +36,20 @@ public class CProductDao implements CProductService {
 	}
 
 	@Override
-	public List<Map<String, Object>> listProduct(String bookname ,int start ,int end) {
+	public List<Map<String, Object>> listProduct(String bookname) {
 		
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		List<Object> params  = new ArrayList<Object>();		
 		try {
 			jdbcUtils.getConnection();			
-			String sql = "select * from book where 1=1 and bookname like ? limit ? ,?";	
+			String sql = "select * from book where 1=1 and bookname like ? ";	
 			if(bookname.equals("")){
-				sql = "select * from book limit ? ,?";
-				params.add(start);
-				params.add(end);
+				sql = "select * from book ";
+				
 				
 			}else{				
 				params.add("%"+bookname+"%");
-				params.add(start);
-				params.add(end);
+				
 			}		
 					
 			list = jdbcUtils.findMoreResult(sql, params);			
@@ -71,22 +69,20 @@ public class CProductDao implements CProductService {
 	}
         
         @Override
-	public List<Map<String, Object>> searchProduct(String bookname ,int start ,int end) {
+	public List<Map<String, Object>> searchProduct(String bookname) {
 	
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		List<Object> params  = new ArrayList<Object>();		
 		try {
 			jdbcUtils.getConnection();			
-			String sql = "select * from book where 1=1 and bookname like ? limit ? ,?";	
+			String sql = "select * from book where 1=1 and bookname like ? ";	
 			if(bookname.equals("")){
-				sql = "select * from book limit ? ,?";
-				params.add(start);
-				params.add(end);
+				sql = "select * from book ";
+				
 				
 			}else{				
 				params.add("%"+bookname+"%");
-				params.add(start);
-				params.add(end);
+				
 			}		
 					
 			list = jdbcUtils.findMoreResult(sql, params);			
@@ -105,23 +101,14 @@ public class CProductDao implements CProductService {
 	}
         
         @Override
-	public List<Map<String, Object>> rankProduct(String proname ,int start ,int end) {
+	public List<Map<String, Object>> rankProduct(String bookname) {
 		
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		List<Object> params  = new ArrayList<Object>();		
 		try {
 			jdbcUtils.getConnection();			
-			String sql = "select * from product order by proprice";	
-//			if(proname.equals("")){
-//				sql = "select * from product limit ? ,?";
-//				params.add(start);
-//				params.add(end);
-//				
-//			}else{				
-//				params.add("%"+proname+"%");
-//				params.add(start);
-//				params.add(end);
-//			}		
+			String sql = "select * from book order by bookprice";	
+		
 					
 			list = jdbcUtils.findMoreResult(sql, params);			
 			
@@ -139,33 +126,7 @@ public class CProductDao implements CProductService {
 	}
 
 	
-	@Override
-	public int getItemCount(String proname) {
-		int count = 0;
-		Map<String, Object> map = null;
-		List<Object> params = null;		
-		try {
-			jdbcUtils.getConnection();			
-			String sql = "select count(*) totalCount from product where 1=1 and proname like ?";	
-			if(proname.equals("")){
-				sql = "select count(*) totalCount from product";
-				
-			}else{
-				params = new ArrayList<Object>();
-				params.add("%"+proname+"%");
-			}
-		map = jdbcUtils.findSimpleResult(sql, params);
-		count = Integer.parseInt(map.get("totalCount").toString());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally{
-			jdbcUtils.releaseConn();
-		}
-		
-		
-		return count;
-	}
+
 
 	@Override
 	public boolean delProduct(String[] ids) {
@@ -192,13 +153,13 @@ public class CProductDao implements CProductService {
 	}
 
 	@Override
-	public Map<String, Object> viewProduct(String proid) {
+	public Map<String, Object> viewProduct(String bookid) {
 		Map<String, Object> map = null;
 		try {
 			jdbcUtils.getConnection();
 			List<Object> params = new ArrayList<Object>();
-			params.add(proid);
-			String sql = "select * from product where proid = ?";
+			params.add(bookid);
+			String sql = "select * from book where bookid = ?";
 			map = jdbcUtils.findSimpleResult(sql, params);
 			
 		} catch (Exception e) {
@@ -211,6 +172,8 @@ public class CProductDao implements CProductService {
 		return map;
 	}
         
+
+
         @Override
         public List<Map<String,Object>> addToCart(String[] ids){
         
@@ -221,16 +184,51 @@ public class CProductDao implements CProductService {
                 
                if (ids!=null) {
 				String sql ="select * from book where ";
+				
+                                
+                for(int i=0;i<ids.length;i++){
+                        String temp = " bookid =  '" + ids[i]+ "'";
+                        sql+= temp;
+                        if(i!=ids.length-1)
+                        {
+                        	sql+=" or ";
+                        }
+				System.out.println(sql);
+				}
+				map = jdbcUtils.findMoreResult2(sql);
+            	}
+            }
+            
+            catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			jdbcUtils.releaseConn();
+		}
+		
+		
+		return map;
+	}
+        
+        @Override
+        public List<Map<String,Object>> checkOut(String[] ids){
+        
+            List<Map<String,Object>> map= new ArrayList<Map<String,Object>>();
+            List<Object> params = new ArrayList<Object>();
+            try{
+                jdbcUtils.getConnection();
+                
+               if (ids!=null) {
+				String sql ="select * from book where ";
                                 for(int i=0;i<ids.length;i++)
                                 {
-                                    String temp = " bookid =  '" + ids[i]+ "'";
+                                    String temp = " bookname =  '" + ids[i]+ "'";
                                     sql+= temp;
                                     if(i!=ids.length-1)
                                     {
                                         sql+=" or ";
                                     }
-					System.out.println(sql);
-				}
+									System.out.println(sql);
+								}
                                 map = jdbcUtils.findMoreResult2(sql);
             }
             }
@@ -245,23 +243,57 @@ public class CProductDao implements CProductService {
 		return map;
 	}
 
-	 @Override
-        public boolean updateNumber(List<Object> params) {
+		@Override
+		public boolean addShopcart(List<Object> params){
+			boolean flag = false;
+			try {
+				jdbcUtils.getConnection();
+				String sql = "insert into shopCart(scid,susername,sbookname) values(?,?,?)";
+				flag = jdbcUtils.updateByPreparedStatement(sql, params);
+			} catch (Exception e) {
+			// TODO: handle exception
+				e.printStackTrace();
+			}finally{
+			
+			// 关闭数据库连接
+			jdbcUtils.releaseConn();
+			
+			}
 		
-		boolean flag = false;
-		try {
-			jdbcUtils.getConnection();
-			String sql = "update product set number = ? where product.proid = ?";
-			flag = jdbcUtils.updateByPreparedStatement1(sql, params);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally{
+			return flag;
+		}
 
+        @Override
+        public List<Map<String, Object>> kindSearch(String booktype) {
+		// TODO Auto-generated method stub
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		List<Object> params  = new ArrayList<Object>();		
+		try {
+			jdbcUtils.getConnection();			
+			String sql = "select * from book where 1=1 and bookkind like ? ";	
+			if(booktype.equals("")){
+				sql = "select * from book ";
+				
+				
+			}else{				
+				params.add("%"+booktype+"%");
+			
+			}		
+					
+			list = jdbcUtils.findMoreResult(sql, params);			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally{
+			
+			
 			jdbcUtils.releaseConn();
 			
 		}
 		
 		
-		return flag;
+		return list;
 	}
+	
 }

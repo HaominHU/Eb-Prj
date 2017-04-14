@@ -4,15 +4,16 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-//get username in session
+//获取 session 中的 username;
 String username = (String)session.getAttribute("username");
-//get search result 
+//获取从 servlet ProductActiion 中 传递的参数(数据库查询的结果)
 List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("listProduct");
-
+// 获取 分页对象
 DividePage dividePage = (DividePage) request.getAttribute("dividePage");
+// 获取查询的关键词
 String productName = (String) request.getAttribute("productName");
 //if(list==null){
-//	
+//	//第一次进 main.jsp页面，默认加载所有的产品
 //	ProductService service = new ProductDao();
 //	int totalRecord = service.getItemCount("");
 //	dividePage = new DividePage(5,totalRecord,1);

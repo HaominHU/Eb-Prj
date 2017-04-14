@@ -2,7 +2,7 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-Map<String,Object> map = (Map<String,Object>)request.getAttribute("productMap");
+Map<String,Object> map = (Map<String,Object>)request.getAttribute("bookDetail");
 
 %>
 
@@ -36,27 +36,27 @@ Map<String,Object> map = (Map<String,Object>)request.getAttribute("productMap");
   			</tr>
   			<tr>
   				<td >
-  					product information
+  					book detail
   				</td>
   			</tr>
   			<tr>
   				<td>
   					<table width = 99% border =1 >
 	  					<tr align="center">
-	  						<td width = 20%>product name</td>
-	  						<td width = 30%><%=map.get("proname") %></td>
-	  						<td width = 20%>product price</td>
-	  						<td><%=map.get("proprice") %></td>
+	  						<td width = 20%>book name</td>
+	  						<td width = 30%><%=map.get("bookname") %></td>
+	  						<td width = 20%>book price</td>
+	  						<td><%=map.get("bookprice") %></td>
 	  						
 	  					
 	  					</tr>
 	  					<tr align="center">
-	  						<td >inv</td>
-	  						<td colspan=3><%=map.get("proinv") %></td>					
+	  						<td >book introduction</td>
+	  						<td colspan=3><%=map.get("bookintro") %></td>					
 	  					</tr>
                                                 <tr align="center">
 	  						<td >kind</td>
-	  						<td colspan=3><%=map.get("prokind") %></td>					
+	  						<td colspan=3><%=map.get("bookkind") %></td>					
 	  					</tr>
   					</table>
   				</td>

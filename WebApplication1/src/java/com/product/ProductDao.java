@@ -38,22 +38,20 @@ public class ProductDao implements ProductService {
 	}
 
 	@Override
-	public List<Map<String, Object>> listProduct(String bookname ,int start ,int end) {
+	public List<Map<String, Object>> listProduct(String proname) {
 		// TODO Auto-generated method stub
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		List<Object> params  = new ArrayList<Object>();		
 		try {
 			jdbcUtils.getConnection();			
 			String sql = "select * from book where 1=1 and bookname like ? limit ? ,?";	
-			if(bookname.equals("")){
+			if(proname.equals("")){
 				sql = "select * from book limit ? ,?";
-				params.add(start);
-				params.add(end);
+				
 				
 			}else{				
-				params.add("%"+bookname+"%");
-				params.add(start);
-				params.add(end);
+				params.add("%"+proname+"%");
+				
 			}		
 					
 			list = jdbcUtils.findMoreResult(sql, params);			
@@ -73,36 +71,7 @@ public class ProductDao implements ProductService {
 	}
 
 	//查询总记录数
-	@Override
-	public int getItemCount(String proname) {
-		// TODO Auto-generated method stub
-		int count = 0;
-		Map<String, Object> map = null;
-		List<Object> params = null;		
-		try {
-			jdbcUtils.getConnection();			
-			String sql = "select count(*) totalCount from product where 1=1 and proname like ?";	
-			if(proname.equals("")){
-				sql = "select count(*) totalCount from product";
-				
-			}else{
-				params = new ArrayList<Object>();
-				params.add("%"+proname+"%");
-			}
-		map = jdbcUtils.findSimpleResult(sql, params);
-		count = Integer.parseInt(map.get("totalCount").toString());
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		} finally{
-			// 关闭数据库连接
-			jdbcUtils.releaseConn();
-		}
-		
-		
-		return count;
-	}
+	
 
 	@Override
 	public boolean delProduct(String[] ids) {
@@ -175,23 +144,21 @@ public class ProductDao implements ProductService {
 		return flag;
 	}
         
-        //@override
-        public List<Map<String, Object>> aclistProduct(String proname ,int start ,int end) {
+        @Override
+        public List<Map<String, Object>> kindSearch(String booktype) {
 		// TODO Auto-generated method stub
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		List<Object> params  = new ArrayList<Object>();		
 		try {
 			jdbcUtils.getConnection();			
-			String sql = "select * from product where 1=1 and prokind like ? limit ? ,?";	
-			if(proname.equals("")){
-				sql = "select * from product limit ? ,?";
-				params.add(start);
-				params.add(end);
+			String sql = "select * from book where 1=1 and bookkind like ? ";	
+			if(booktype.equals("")){
+				sql = "select * from book ";
+				
 				
 			}else{				
-				params.add("%"+proname+"%");
-				params.add(start);
-				params.add(end);
+				params.add("%"+booktype+"%");
+			
 			}		
 					
 			list = jdbcUtils.findMoreResult(sql, params);			
@@ -209,6 +176,7 @@ public class ProductDao implements ProductService {
 		
 		return list;
 	}
+        
         public int getItemCount1(String proname) {
 		// TODO Auto-generated method stub
 		int count = 0;

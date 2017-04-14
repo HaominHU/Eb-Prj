@@ -153,7 +153,7 @@ if(list==null){
 
    <table width=60% align="center">
    <tr>
-   		<td align="left"><font size=8>Welcome!<%=username%><br><a href="javascript:logout();"></a></font></td>
+   		<td align="left"><font size=2>welcome!<%=username%><br><a href="javascript:logout();"></a></font></td>
    </tr>
    	
    	
@@ -162,8 +162,8 @@ if(list==null){
    	</tr>
    	<tr>
    		<td> RESULT</td>
-        <br>
-    	<br>
+                <br>
+                <br>
    	</tr>
    	
    	<tr>
@@ -267,7 +267,7 @@ if(list==null){
    				<!-- <button type="button" onclick="searchProduct()" >search</button>-->
                 <br>
                 <br>
-   				<button type="button" style="width: 65px; height: 25px;"onclick="javascript:location.href='<%=path %>/Cmain.jsp'">Back</button>
+   				<button type="button" style="width: 65px; height: 25px;"onclick="javascript:location.href='<%=path %>/Cmain.jsp'">finish</button>
                 <!--<span width = 30%></span>-->
    			 	<!--<button type="button" style="width: 65px; height: 25px;"onclick="javascript:location.href='<%=path %>/updateOrder.jsp'">update</button>-->  
    				</td>   				

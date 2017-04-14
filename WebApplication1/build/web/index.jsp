@@ -24,24 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <script type="text/javascript">
-function login(){
-	var th = document.form1;
-	if(th.username.value==""){
-		alert("Username can not be empty!");
-		th.username.focus();
-		return;
-	}
-	if(th.pswd.value==""){
-		alert("Password can not be empty!");
-		th.pswd.focus();
-		return;
-	}
-	
-	th.action = "<%=path%>/servlet/LoginAction";
-	th.submit();
 
-
-}
 function Clogin(){
 	var th1 = document.form1;
 	if(th1.username.value==""){
@@ -85,7 +68,7 @@ function Clogin(){
    		<tr>
    		
    		<td colspan="2" align="center">
-   		<button type="button" name="" value="" onclick="Clogin()">UserLogin</button>
+   		<button type="button" name="" value="" onclick="Clogin()">Login</button>
                 <!--<button type="button" name="" value="" onclick="login()">AdminLogin</button>-->
    		<button type="button" name="" value="" onclick="javascript:location.href='register.jsp'">Register</button>
    		</td>   		

@@ -6,7 +6,7 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("CProduct");
+List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("checkOut");
 String username = (String)session.getAttribute("username");
 %>
 
@@ -14,7 +14,7 @@ String username = (String)session.getAttribute("username");
 <html>
   <head>
     <base href="<%=basePath%>">
-    <title>Shopping Cart</title>
+    <title>Checkout</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -60,7 +60,7 @@ String username = (String)session.getAttribute("username");
                                             <td width=30%>BookPrice</td>
                                             <td width=30%>BookKind</td>
                                             <td width=30%>Amount</td>
-                                            <td>Price</td>
+
                                             
                                         </tr>
                                        
@@ -71,15 +71,15 @@ String username = (String)session.getAttribute("username");
    				for(Map<String,Object> map :list){%>
    			
                                     <tr align="center">
-<!--   				<td width=10%><input type="checkbox" name="ids" value="<%=map.get("proid") %>"/></td>-->
+   				
                                         <td width=30%><%=map.get("bookname") %></td>
                                         <td width=30%><%=map.get("bookprice") %></td>
                                         <td><%=map.get("bookkind") %></td>
                                         <td><%=map.get("number") %></td>
                                         <td><input type = "hidden" name = "bookname" value = "<%=map.get("bookname")%>"readonly/></td>
                                         <td><input type = "hidden" name = "bookquantity" value = "<%=map.get("number")%>"readonly/></td>
- <!--                                       <td><input type = "hidden" name = "proinv" value = "<%=map.get("proinv")%>" readonly/></td>-->
-                                        
+ <!--                                   <td><input type = "hidden" name = "proinv" value = "<%=map.get("proinv")%>" readonly/></td>-->
+                                    </tr>  
                                 <%
                                   Object a=map.get("bookprice");
                                   int c = Integer.parseInt(a==null?"":a.toString());
@@ -88,7 +88,7 @@ String username = (String)session.getAttribute("username");
                                   int t = 0;
                                   
                                   t =c*d;
-                                  out.print("<td>"+t+"</td>");
+                                  //out.print("<td>"+t+"</td>");
                                   sum += t;
                                 %>
 
@@ -98,7 +98,7 @@ String username = (String)session.getAttribute("username");
    			}else{%>
    			
                                 <tr align="center">
-                                    <td width=10%><input type="checkbox" name="" /></td>
+                                    <td width=10%></td>
                                     <td width=30%></td>
                                     <td width=30%></td>
                                     <td></td>
@@ -122,7 +122,6 @@ String username = (String)session.getAttribute("username");
                                 <tr>
                                      <td width = 15%><input type = "text" name = "sum" style = "border-style:none" value = "<%out.print(sum);%>"readonly/></td>
                                 </tr>
-<!--                                 out.print("<td>"+sum+"</td>");-->
                                 <tr>
                                     <td>
                                          <tr>
