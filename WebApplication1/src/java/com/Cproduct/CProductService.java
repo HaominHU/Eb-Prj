@@ -13,9 +13,11 @@ public interface CProductService {
 	//查询单个产品
 	public Map<String, Object> viewProduct(String bookid);
         //加入购物车
+
+	public boolean addShopcart(List<Object> params);
     public List<Map<String,Object>> addToCart(String[] ids);
 	public List<Map<String,Object>> checkOut(String[] ids);
-	public boolean addShopcart(List<Object> params);
+
     public List<Map<String, Object>> rankProduct(String bookname);
     public List<Map<String, Object>> searchProduct(String bookname);
     public List<Map<String, Object>> kindSearch(String booktype);

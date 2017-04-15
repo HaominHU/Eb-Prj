@@ -71,7 +71,7 @@ String username = (String)session.getAttribute("username");
    				for(Map<String,Object> map :list){%>
    			
                                     <tr align="center">
-                                        <td width=10%><input type="checkbox" name="ids" value="<%=map.get("bookname") %>"/></td>
+                                        <td width=10%><input type="checkbox" name="ids" value="<%=map.get("bookid") %>"/></td>
                                         <td width=30%><%=map.get("bookname") %></td>
                                         <td width=30%><%=map.get("bookprice") %></td>
                                         <td><%=map.get("bookauthor") %></td>
@@ -101,9 +101,9 @@ String username = (String)session.getAttribute("username");
                         
                 
                                 <!--</table>--> 
-                                <tr>
+                                
                                     <td><input width = 10% type = "hidden" name = "username" value = "<%=username%>"readonly/></td>
-                                </tr>
+                                
                                
                                
                                 
@@ -141,7 +141,7 @@ String username = (String)session.getAttribute("username");
 		}
 		
 		var th = document.form1;
-		th.action="<%=path%>/servlet/CProductAction?action_flag=checkout&bookname="+getSelectedValue();
+		th.action="<%=path%>/servlet/CProductAction?action_flag=checkout&bookid="+getSelectedValue();
 		th.submit();		
 	
 	}

@@ -73,6 +73,62 @@ public class OrderDao implements OrderService {
 		
 		return flag;
         }
+	
+        @Override
+	public boolean delSell(String[] ids, String[] ids2){
+		boolean flag = false;
+		boolean flag2 = false;
+		boolean flag3 = false;
+		try{
+			jdbcUtils.getConnection();
+			if(ids!=null && ids2!=null){
+				//flag3 = true;
+				String[] sql = new String[ids.length];
+				String[] sql2 = new String[ids2.length];
+				for(int i = 0 ; i< ids.length; i++){
+					sql[i] = "delete from book where bookid = '"+ids[i]+"'";
+				}
+				for(int j = 0;j<ids2.length;j++){
+					sql2[j] = "delete from shopCart where sbookname = '"+ids2[j]+"'";
+				}
+				flag = jdbcUtils.deleteByBatch(sql);
+				flag2 = jdbcUtils.deleteByBatch(sql2);
+				if(flag && flag2){
+					flag3 = true;
+				}
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally{
+			// 关闭数据库连接
+			jdbcUtils.releaseConn();
+		}	
+		
+		return flag3;
+	}
+
+	// @Override
+	// public boolean delSc(String[] ids){
+	// 	boolean flag = false;
+	// 	try{
+	// 		jdbcUtils.getConnection();
+	// 		if(ids != null){
+	// 			String[] sql = new String[ids.length];
+	// 			for(int i = 0;i<ids.length;i++){
+	// 				sql[i] = "delete from shopCart where sbookname = '"+ids[i]+"'";
+	// 			}
+	// 		}
+	// 	}
+	// 	catch (Exception e) {
+	// 		// TODO: handle exception
+	// 		e.printStackTrace();
+	// 	} finally{
+	// 		// 关闭数据库连接
+	// 		jdbcUtils.releaseConn();
+	// 	}	
+	// 	return flag;
+	// }
         
 	@Override
 	public List<Map<String, Object>> listOrder(String username ,int start ,int end) {
@@ -185,4 +241,14 @@ public class OrderDao implements OrderService {
 		
 		return flag;
 	}
+
+    @Override
+    public boolean updateOrder(List<Object> params) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean delOrder(String[] ids) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

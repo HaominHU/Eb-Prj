@@ -333,8 +333,8 @@ public class OrderAction extends HttpServlet{
 			// 把产品加入数据库
 			boolean flag1 = service.addOrder(params1);
 			if (flag1) {
-				
-				response.sendRedirect(path+"/Cmain.jsp");
+				delSell(request,response);
+				//response.sendRedirect(path+"/Cmain.jsp");
 			}
 				
 			
@@ -343,6 +343,34 @@ public class OrderAction extends HttpServlet{
 			e.printStackTrace();
 		}
         }
+
+		private void delSell(HttpServletRequest request, HttpServletResponse response){
+				String[] ids = request.getParameterValues("bookid");
+				String[] ids2 = request.getParameterValues("bookname");
+				boolean flag = service.delSell(ids,ids2);
+				if (flag) {
+					try {
+						request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
+						//delSc(request,response);
+					} 
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+		}
+
+		// private void delSc(HttpServletRequest request, HttpServletResponse response){
+		// 	String[] ids = request.getParameterValues("bookname");
+		// 	boolean flag = service.delSc(ids);
+		// 	if(flag){
+		// 		try{
+		// 			request.getRequestDispatcher("/Cmain.jsp").forward(request,response);
+		// 		}
+		// 		catch(Exception e){
+		// 			e.printStackTrace();
+		// 		}
+		// 	}
+		// }
         
         private void addDetail(HttpServletRequest request, HttpServletResponse response) 
                 throws ServletException, IOException{

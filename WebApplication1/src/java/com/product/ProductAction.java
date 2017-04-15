@@ -88,8 +88,8 @@ public class ProductAction extends HttpServlet {
                 else if (action_flag.equals("edsearch")) {
 			educationSearch(request,response);
 		}
-                else if (action_flag.equals("bisearch")) {
-			biographySearch(request,response);
+                else if (action_flag.equals("lisearch")) {
+			literatureSearch(request,response);
 		}
                 
 		
@@ -277,11 +277,11 @@ public class ProductAction extends HttpServlet {
 		}		
 		
 	}
-        private void biographySearch(HttpServletRequest request,
+        private void literatureSearch(HttpServletRequest request,
 			HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		
-		String productName = "biography";	
+		String productName = "Literature";	
 		
 		
 		if (productName == null) {

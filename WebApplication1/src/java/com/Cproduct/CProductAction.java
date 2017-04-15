@@ -61,7 +61,8 @@ public class CProductAction extends HttpServlet {
 		}else if (action_flag.equals("search")) {
 			searchProduct(request,response);
 		}else if (action_flag.equals("addtocart")) {
-			addToCart(request,response);
+			addShopcart(request,response);
+			//addToCart(request,response);
 		}else if (action_flag.equals("view")) {
 			viewProduct(request,response);
 		}else if (action_flag.equals("rank")) {
@@ -72,12 +73,12 @@ public class CProductAction extends HttpServlet {
         else if (action_flag.equals("edsearch")) {
 			educationSearch(request,response);
 		}
-        else if (action_flag.equals("bisearch")) {
-			biographySearch(request,response);
+        else if (action_flag.equals("lisearch")) {
+			literatureSearch(request,response);
 		}
         else if(action_flag.equals("checkout")) {
-			addShopcart(request,response);
-            //checkOut(request,response);
+			//addShopcart(request,response);
+            checkOut(request,response);
         }
 
 
@@ -89,7 +90,7 @@ public class CProductAction extends HttpServlet {
 
 	private void viewProduct(HttpServletRequest request,
 			HttpServletResponse response) {
-		String bookid = request.getParameter("bookid");
+		String bookid = request.getParameter("bookname");
 		Map<String, Object> map = service.viewProduct(bookid);
 		request.setAttribute("bookDetail", map);
 		try {
@@ -103,7 +104,6 @@ public class CProductAction extends HttpServlet {
 
         private void addToCart(HttpServletRequest request,
 			HttpServletResponse response) {    
-		//add in Shopping cart table
       
 		String[] ids = request.getParameterValues("ids");
                 
@@ -150,23 +150,25 @@ public class CProductAction extends HttpServlet {
 		throws ServletException,IOException{
 		String path = request.getContextPath();
 		boolean flag1 = false ;
-		List<Object> params1 = new ArrayList<Object>();
+		//List<Object> params1 = new ArrayList<Object>();
 		String key = UUIDTools.getUUID();
         String username=request.getParameter("username");
-        String[] bookname=request.getParameterValues("ids");
+        //String[] bookname=request.getParameterValues("ids");
+		String[] ids = request.getParameterValues("ids");
 		try{
 
-			for(int i = 0; i<bookname.length; i++){
+			for(int i = 0; i<ids.length; i++){
+				List<Object> params1 = new ArrayList<Object>();
 				params1.add(key);
 			    params1.add(username);
-            	params1.add(bookname[i]);
+            	params1.add(ids[i]);
 				flag1 = service.addShopcart(params1);
             }
 			
 			if(flag1){
 				//response.sendRedirect(path+"/shoppingcart.jsp");
 				//request.getRequestDispatcher("/shoppingcart.jsp").forward(request,response);
-				checkOut(request, response);
+				addToCart(request, response);
 			}
 		}
 		catch (Exception e) {
@@ -201,32 +203,32 @@ public class CProductAction extends HttpServlet {
 		
 	}
 
-//	private void listProduct(HttpServletRequest request,
-//			HttpServletResponse response) {
-//		String productName = request.getParameter("proname");	
-//	
-//		
-//		if (productName == null) {
-//			productName = "";
-//		}
-//		
-//		
-//		
-//		int totalRecord = service.getItemCount(productName); 
-//		
-//		
-//		List<Map<String, Object>> list = null;
-//		try {
-//			list = service.listProduct(productName);
-//			request.setAttribute("listProduct", list);
-//			
-//			request.setAttribute("productName",productName );
-//			request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}		
-//		
-//	}
+	// private void listProduct(HttpServletRequest request,
+	// 		HttpServletResponse response) {
+	// 	String bookName = request.getParameter("bookname");	
+	
+		
+	// 	if (bookName == null) {
+	// 		bookName = "";
+	// 	}
+		
+		
+		
+	// 	int totalRecord = service.getItemCount(bookName); 
+		
+		
+	// 	List<Map<String, Object>> list = null;
+	// 	try {
+	// 		list = service.listProduct(bookName);
+	// 		request.setAttribute("listProduct", list);
+			
+	// 		request.setAttribute("bookName",bookName );
+	// 		request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
+	// 	} catch (Exception e) {
+	// 		e.printStackTrace();
+	// 	}		
+		
+	// }
         
         private void rankProduct(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException{
@@ -359,11 +361,11 @@ public class CProductAction extends HttpServlet {
 		}		
 		
 	}
-        private void biographySearch(HttpServletRequest request,
+        private void literatureSearch(HttpServletRequest request,
 			HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		
-		String productName = "biography";	
+		String productName = "Literature";	
 		
 		
 		if (productName == null) {

@@ -153,13 +153,13 @@ public class CProductDao implements CProductService {
 	}
 
 	@Override
-	public Map<String, Object> viewProduct(String bookid) {
+	public Map<String, Object> viewProduct(String bookname) {
 		Map<String, Object> map = null;
 		try {
 			jdbcUtils.getConnection();
 			List<Object> params = new ArrayList<Object>();
-			params.add(bookid);
-			String sql = "select * from book where bookid = ?";
+			params.add(bookname);
+			String sql = "select * from book where bookname = ?";
 			map = jdbcUtils.findSimpleResult(sql, params);
 			
 		} catch (Exception e) {
@@ -187,7 +187,7 @@ public class CProductDao implements CProductService {
 				
                                 
                 for(int i=0;i<ids.length;i++){
-                        String temp = " bookid =  '" + ids[i]+ "'";
+                        String temp = " bookname =  '" + ids[i]+ "'";
                         sql+= temp;
                         if(i!=ids.length-1)
                         {
@@ -221,7 +221,7 @@ public class CProductDao implements CProductService {
 				String sql ="select * from book where ";
                                 for(int i=0;i<ids.length;i++)
                                 {
-                                    String temp = " bookname =  '" + ids[i]+ "'";
+                                    String temp = " bookid =  '" + ids[i]+ "'";
                                     sql+= temp;
                                     if(i!=ids.length-1)
                                     {

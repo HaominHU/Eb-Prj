@@ -78,7 +78,7 @@ String username = (String)session.getAttribute("username");
                                         <td><%=map.get("number") %></td>
                                         <td><input type = "hidden" name = "bookname" value = "<%=map.get("bookname")%>"readonly/></td>
                                         <td><input type = "hidden" name = "bookquantity" value = "<%=map.get("number")%>"readonly/></td>
- <!--                                   <td><input type = "hidden" name = "proinv" value = "<%=map.get("proinv")%>" readonly/></td>-->
+                                        <td><input type = "hidden" name = "bookid" value = "<%=map.get("bookid")%>" readonly/></td>
                                     </tr>  
                                 <%
                                   Object a=map.get("bookprice");
