@@ -7,7 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 //获取 session 中的 username;
 String username = (String)session.getAttribute("username");
 //获取从 servlet ProductActiion 中 传递的参数(数据库查询的结果)
-List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("listProduct");
+List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("listTrade");
 // 获取 分页对象
 DividePage dividePage = (DividePage) request.getAttribute("dividePage");
 // 获取查询的关键词
@@ -15,8 +15,8 @@ String productName = (String) request.getAttribute("productName");
 if(list==null){
 	//第一次进 main.jsp页面，默认加载所有的产品
 	ProductService service = new ProductDao();
-	int totalRecord = service.getItemCount("");
-	dividePage = new DividePage(5,totalRecord,1);
+	
+
 	int start = dividePage.fromIndex();
 	int end = dividePage.toIndex();
 	list = service.listProduct("");
@@ -187,11 +187,11 @@ if(list==null){
    				for(Map<String,Object> map :list){%>
    			
    				<tr align="center">
-   				<td width=10%><input type="checkbox" name="ids" value="<%=map.get("proid") %>"/></td>
-   				<td width=30%><%=map.get("proname") %></td>
-   				<td width=30%><%=map.get("proinv") %></td>
-   				<td><%=map.get("proprice") %></td>
-   				<td><%= map.get("prokind")%></td>
+   				<td width=10%><input type="checkbox" name="ids" value="<%=map.get("bookid") %>"/></td>
+   				<td width=30%><%=map.get("bookname") %></td>
+   				<td width=30%><%=map.get("bookseller") %></td>
+   				<td><%=map.get("bookprice") %></td>
+   				<td><%= map.get("bookkind")%></td>
                                 
    				<%}
    			

@@ -153,13 +153,13 @@ public class CProductDao implements CProductService {
 	}
 
 	@Override
-	public Map<String, Object> viewProduct(String bookname) {
+	public Map<String, Object> viewProduct(String username) {
 		Map<String, Object> map = null;
 		try {
 			jdbcUtils.getConnection();
 			List<Object> params = new ArrayList<Object>();
-			params.add(bookname);
-			String sql = "select * from book where bookname = ?";
+			params.add(username);
+			String sql = "select * from book where bookid = ?";
 			map = jdbcUtils.findSimpleResult(sql, params);
 			
 		} catch (Exception e) {
@@ -172,31 +172,35 @@ public class CProductDao implements CProductService {
 		return map;
 	}
         
-
-
         @Override
         public List<Map<String,Object>> addToCart(String[] ids){
         
             List<Map<String,Object>> map= new ArrayList<Map<String,Object>>();
             List<Object> params = new ArrayList<Object>();
+            boolean flag=false;
             try{
                 jdbcUtils.getConnection();
                 
                if (ids!=null) {
 				String sql ="select * from book where ";
-				
                                 
-                for(int i=0;i<ids.length;i++){
-                        String temp = " bookname =  '" + ids[i]+ "'";
-                        sql+= temp;
-                        if(i!=ids.length-1)
-                        {
-                        	sql+=" or ";
-                        }
-				System.out.println(sql);
+                                for(int i=0;i<ids.length;i++)
+                                {
+                                    String temp = " bookid =  '" + ids[i]+ "'";
+                                    sql+= temp;
+                                    if(i!=ids.length-1)
+                                    {
+                                        sql+=" or ";
+                                    }
+					System.out.println(sql);
 				}
-				map = jdbcUtils.findMoreResult2(sql);
-            	}
+                                map = jdbcUtils.findMoreResult2(sql);
+                                
+                                
+                                 
+                                
+                                
+            }
             }
             
             catch (Exception e) {
@@ -208,6 +212,26 @@ public class CProductDao implements CProductService {
 		
 		return map;
 	}
+        
+        @Override
+        public boolean addShopcart(List<Object> params){
+		boolean flag = false;
+		try {
+			jdbcUtils.getConnection();
+			String sql = "insert into shopcart(scid,susername) values(?,?)";
+			flag = jdbcUtils.updateByPreparedStatement(sql, params);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally{
+			
+			// 关闭数据库连接
+			jdbcUtils.releaseConn();
+			
+		}
+		
+		return flag;
+		}
         
         @Override
         public List<Map<String,Object>> checkOut(String[] ids){
@@ -227,8 +251,8 @@ public class CProductDao implements CProductService {
                                     {
                                         sql+=" or ";
                                     }
-									System.out.println(sql);
-								}
+					System.out.println(sql);
+				}
                                 map = jdbcUtils.findMoreResult2(sql);
             }
             }
@@ -243,26 +267,49 @@ public class CProductDao implements CProductService {
 		return map;
 	}
 
-		@Override
-		public boolean addShopcart(List<Object> params){
-			boolean flag = false;
-			try {
-				jdbcUtils.getConnection();
-				String sql = "insert into shopCart(scid,susername,sbookname) values(?,?,?)";
-				flag = jdbcUtils.updateByPreparedStatement(sql, params);
-			} catch (Exception e) {
+        @Override
+        public List<Map<String,Object>> viewMytrade(List<Object> params){
+            List<Map<String, Object>> list = null;
+            try {
+			jdbcUtils.getConnection();
+			//List<Object> params = new ArrayList<Object>();
+			String sql = "select * from book where bookseller = ?";
+			//map = jdbcUtils.findSimpleResult(sql, params);
+			list = jdbcUtils.findMoreResult(sql, params);
+		} catch (Exception e) {
 			// TODO: handle exception
-				e.printStackTrace();
-			}finally{
-			
+			e.printStackTrace();
+		} finally{
 			// 关闭数据库连接
 			jdbcUtils.releaseConn();
-			
-			}
-		
-			return flag;
 		}
-
+		
+		
+		return list;
+        }
+        
+        @Override
+        public List<Map<String,Object>> viewShoppingCart(List<Object> params){
+            List<Map<String, Object>> list = null;
+            try {
+			jdbcUtils.getConnection();
+			
+			String sql = "select * from shopcart where susername = ?";
+			
+			list = jdbcUtils.findMoreResult(sql, params);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally{
+			// 关闭数据库连接
+			jdbcUtils.releaseConn();
+		}
+		
+		
+		return list;
+        }
+        
+        
         @Override
         public List<Map<String, Object>> kindSearch(String booktype) {
 		// TODO Auto-generated method stub

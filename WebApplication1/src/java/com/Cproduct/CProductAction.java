@@ -20,6 +20,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.util.DividePage;
 import com.util.UUIDTools;
+import java.util.Iterator;
 
 public class CProductAction extends HttpServlet {
 
@@ -62,7 +63,6 @@ public class CProductAction extends HttpServlet {
 			searchProduct(request,response);
 		}else if (action_flag.equals("addtocart")) {
 			addShopcart(request,response);
-			//addToCart(request,response);
 		}else if (action_flag.equals("view")) {
 			viewProduct(request,response);
 		}else if (action_flag.equals("rank")) {
@@ -70,16 +70,21 @@ public class CProductAction extends HttpServlet {
 		}else if (action_flag.equals("nosearch")) {
 			novelSearch(request,response);
 		}
-        else if (action_flag.equals("edsearch")) {
+                else if (action_flag.equals("edsearch")) {
 			educationSearch(request,response);
 		}
-        else if (action_flag.equals("lisearch")) {
+                else if (action_flag.equals("bisearch")) {
 			literatureSearch(request,response);
 		}
-        else if(action_flag.equals("checkout")) {
-			//addShopcart(request,response);
-            checkOut(request,response);
-        }
+                else if(action_flag.equals("checkout")) {
+                        checkOut(request,response);
+                }
+                else if(action_flag.equals("mytrade")){
+                        viewMytrade(request,response);
+                }
+                else if(action_flag.equals("viewShoppingCart")){
+                        viewShoppingCart(request,response);
+                }
 
 
 		
@@ -90,8 +95,9 @@ public class CProductAction extends HttpServlet {
 
 	private void viewProduct(HttpServletRequest request,
 			HttpServletResponse response) {
-		String bookid = request.getParameter("bookname");
+		String bookid = request.getParameter("bookid");
 		Map<String, Object> map = service.viewProduct(bookid);
+                
 		request.setAttribute("bookDetail", map);
 		try {
 			request.getRequestDispatcher("/viewProduct.jsp").forward(request, response);
@@ -101,10 +107,12 @@ public class CProductAction extends HttpServlet {
 		
 	}
         
-
+       
+        
         private void addToCart(HttpServletRequest request,
-			HttpServletResponse response) {    
-      
+			HttpServletResponse response) {
+                
+                
 		String[] ids = request.getParameterValues("ids");
                 
 //                for(int i=0;i<ids.length;i++){
@@ -112,18 +120,55 @@ public class CProductAction extends HttpServlet {
 //                }
 		List<Map<String,Object>> map = service.addToCart(ids);
 
-		request.setAttribute("bookCart", map);
-		//boolean flag1 = service.addinScart(params1);
-		 try {
-		// 	if(flag1){
-		 	request.getRequestDispatcher("/shoppingcart.jsp").forward(request, response);
-		// 	}
-                        
-		 } catch (Exception e) {
-		 	e.printStackTrace();
-		 } 
+		//request.setAttribute("bookCart", map);
+                for(Map<String,Object> map1:map){
+                Object bookid=map1.get("bookid");
+                Object bookname=map1.get("bookname");
+            
+                List<Object> params=new ArrayList<Object>();
+                params.add(bookid);
+                params.add(bookname);
+                }
+		try {
+			//request.getRequestDispatcher("/shoppingcart.jsp").forward(request, response);
+                        viewShoppingCart(request,response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 		
 	}
+        
+        private void addShopcart(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException,IOException{
+		String path = request.getContextPath();
+		boolean flag1 = false ;
+		//List<Object> params1 = new ArrayList<Object>();
+		//String key = UUIDTools.getUUID();
+                String username=request.getParameter("username");
+                //String[] bookname=request.getParameterValues("ids");
+		String[] ids = request.getParameterValues("ids");
+		try{
+
+			for(int i = 0; i<ids.length; i++){
+				List<Object> params1 = new ArrayList<Object>();
+				//params1.add(key);
+                                params1.add(ids[i]);
+				params1.add(username);
+				flag1 = service.addShopcart(params1);
+            }
+			
+			if(flag1){
+				//response.sendRedirect(path+"/shoppingcart.jsp");
+				//request.getRequestDispatcher("/shoppingcart.jsp").forward(request,response);
+				addToCart(request, response);
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
         
         private void checkOut(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -144,37 +189,6 @@ public class CProductAction extends HttpServlet {
 			e.printStackTrace();
 		} 
 		
-	}
-
-		private void addShopcart(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException,IOException{
-		String path = request.getContextPath();
-		boolean flag1 = false ;
-		//List<Object> params1 = new ArrayList<Object>();
-		String key = UUIDTools.getUUID();
-        String username=request.getParameter("username");
-        //String[] bookname=request.getParameterValues("ids");
-		String[] ids = request.getParameterValues("ids");
-		try{
-
-			for(int i = 0; i<ids.length; i++){
-				List<Object> params1 = new ArrayList<Object>();
-				params1.add(key);
-			    params1.add(username);
-            	params1.add(ids[i]);
-				flag1 = service.addShopcart(params1);
-            }
-			
-			if(flag1){
-				//response.sendRedirect(path+"/shoppingcart.jsp");
-				//request.getRequestDispatcher("/shoppingcart.jsp").forward(request,response);
-				addToCart(request, response);
-			}
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
 	}
 
 	private void searchProduct(HttpServletRequest request,
@@ -203,32 +217,32 @@ public class CProductAction extends HttpServlet {
 		
 	}
 
-	// private void listProduct(HttpServletRequest request,
-	// 		HttpServletResponse response) {
-	// 	String bookName = request.getParameter("bookname");	
-	
-		
-	// 	if (bookName == null) {
-	// 		bookName = "";
-	// 	}
-		
-		
-		
-	// 	int totalRecord = service.getItemCount(bookName); 
-		
-		
-	// 	List<Map<String, Object>> list = null;
-	// 	try {
-	// 		list = service.listProduct(bookName);
-	// 		request.setAttribute("listProduct", list);
-			
-	// 		request.setAttribute("bookName",bookName );
-	// 		request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
-	// 	} catch (Exception e) {
-	// 		e.printStackTrace();
-	// 	}		
-		
-	// }
+//	private void listProduct(HttpServletRequest request,
+//			HttpServletResponse response) {
+//		String productName = request.getParameter("proname");	
+//	
+//		
+//		if (productName == null) {
+//			productName = "";
+//		}
+//		
+//		
+//		
+//		int totalRecord = service.getItemCount(productName); 
+//		
+//		
+//		List<Map<String, Object>> list = null;
+//		try {
+//			list = service.listProduct(productName);
+//			request.setAttribute("listProduct", list);
+//			
+//			request.setAttribute("productName",productName );
+//			request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}		
+//		
+//	}
         
         private void rankProduct(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException{
@@ -365,16 +379,16 @@ public class CProductAction extends HttpServlet {
 			HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		
-		String productName = "Literature";	
+		String bookkind = "Literature";	
 		
 		
-		if (productName == null) {
-			productName = "";
+		if (bookkind == null) {
+			bookkind = "";
 		}
 
 		List<Map<String, Object>> list = null;
 		try {
-			list = service.kindSearch(productName);
+			list = service.kindSearch(bookkind);
 			request.setAttribute("listBook", list);
 			
 			
@@ -386,8 +400,56 @@ public class CProductAction extends HttpServlet {
 		
 	}
         
+        public void viewMytrade(HttpServletRequest request,
+			HttpServletResponse response){
+            
+            List<Map<String, Object>> list = null;
+                List<Object> params = new ArrayList<Object>();
+                String bookseller = request.getParameter("username");
+//                String bookseller="xinhua";
+                params.add(bookseller);
+                list = service.viewMytrade(params);
+//                request.setAttribute("listOrder",list);
+                
+                try{
+                        request.setAttribute("listTrade", list);
+						request.getRequestDispatcher("/main.jsp").forward(request, response);
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+        }
 
-	
+	public void viewShoppingCart(HttpServletRequest request,
+			HttpServletResponse response){
+            
+            List<Map<String, Object>> list = null;
+                List<Object> params = new ArrayList<Object>();
+                String bookseller = request.getParameter("username");
+                
+                params.add(bookseller);
+                list = service.viewShoppingCart(params);
+
+                List<Object> params1 = new ArrayList<Object>();
+                String[] a=new String[list.size()];
+                int i=0;
+                for(Map<String,Object> map:list){
+                    Object username=map.get("scid");
+                    String username1=username.toString();
+                    a[i]=username1;
+                    i++;
+                }
+                List<Map<String,Object>> map= new ArrayList<Map<String,Object>>();
+                map=service.checkOut(a);
+                
+                try{
+                        request.setAttribute("bookCart", map);
+			request.getRequestDispatcher("/shoppingcart.jsp").forward(request, response);
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+        }
+        
+        
 	public void init() throws ServletException {
 		// Put your code here
 		service = new CProductDao();

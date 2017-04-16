@@ -187,13 +187,17 @@ public class ProductAction extends HttpServlet {
 				if (fileItem.isFormField()) {//是文本字段
 					String fileItemName = fileItem.getFieldName(); //获取 <input>控件的 名称
 					String fileItemValue = fileItem.getString("utf-8");//获取<input>控件的值
-					if (fileItemName.equals("proname")) {
+					if (fileItemName.equals("bookname")) {
 						params.add(fileItemValue); //参数传入 proname
-					}else if (fileItemName.equals("proprice")) {
+					}else if (fileItemName.equals("bookauthor")) {
 						params.add(fileItemValue);//参数传入 proprice
-					}else if (fileItemName.equals("proinv")) {
+					}else if (fileItemName.equals("bookprice")) {
+						params.add(fileItemValue);//参数传入 proprice
+					}else if (fileItemName.equals("bookintro")) {
 						params.add(fileItemValue);////参数传入 proinv
-                                        }else if(fileItemName.equals("prokind")){
+                                        }else if(fileItemName.equals("bookkind")){
+                                            params.add(fileItemValue);
+                                        }else if(fileItemName.equals("bookseller")){
                                             params.add(fileItemValue);
                                         }
                         }
@@ -213,7 +217,8 @@ public class ProductAction extends HttpServlet {
 			boolean flag = service.addProduct(params);
 			if (flag) {
 				
-				response.sendRedirect(path+"/main.jsp");
+				response.sendRedirect(path+"/Cmain.jsp");
+//                                request.getRequestDispatcher("/main.jsp").forward(request, response);
 			}
 				
 			

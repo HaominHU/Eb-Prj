@@ -21,7 +21,7 @@ public class ProductDao implements ProductService {
 		boolean flag = false;
 		try {
 			jdbcUtils.getConnection();
-			String sql = "insert into product(proid,proname,proprice,proinv,prokind) values(?,?,?,?,?)";
+			String sql = "insert into book(bookid,bookname,bookauthor,bookprice,bookintro,bookkind,bookseller) values(?,?,?,?,?,?,?)";
 			flag = jdbcUtils.updateByPreparedStatement(sql, params);
 		} catch (Exception e) {
 			// TODO: handle exception

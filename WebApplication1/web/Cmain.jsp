@@ -1,6 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ page import="com.util.*" %>
-<%@ page import="com.product.*"%>
 <%@ page import="com.Cproduct.*" %>
 <%
 String path = request.getContextPath();
@@ -44,13 +43,15 @@ if(list==null){
    <table width=60% align="center">
    <tr>
    		<td align="left"><font size=2>welcome，<%=username%><br><a href="javascript:logout();">logout</a></font></td>
-        <!--<td><input type = "hidden" name = "username" value = "<%=username%>"readonly/></td>-->
-        <button type="button" name="" value="" onclick="javascript:location.href='orders.jsp'">view order</button>
-        <button type="button" name="" value="" onclick="javascript:location.href='main.jsp'">my trade</button>
+                <button type="button" name="" value="" onclick="javascript:location.href='orders.jsp'">view order</button>
+                <button type="button" name="" value="" onclick="mytrade()">my trade</button>
+                <button type="button" name="" value="" onclick="shoppingCart()">shopping cart</button>
+                   
    </tr>
    	<tr>
    		<td align="center">
    		<form name = "form2" action="" method="post">
+                     
    		<table>
    			<tr>
    				<td colspan="2">search product</td>
@@ -66,16 +67,18 @@ if(list==null){
    				<td colspan="2" align="center">
    					<button type="button" onclick="searchProduct()" >search</button>
                                         <button type="button" onclick="rank()" >rank by price</button>	
+                                        <button type="button" name="" value="" onclick="mytrade()">my trade</button>
    				</td>   				
    			</tr>
                         <tr>
                             <td colspan = "2" align = "center">
                                 <button type = "button" onclick = "novel()">novel</button>
                                 <button type = "button" onclick = "education()">education</button>
-                                <button type = "button" onclick = "Literature()">Literature</button>
+                                <button type = "button" onclick = "literature()">literature</button>
                             </td>
                         </tr>
-   		</table>  	
+   		</table> 
+                                <td><input type = "hidden" name = "username" value = "<%=username%>" readonly/></td>  
    		</form>	
    			
    		</td>
@@ -97,8 +100,8 @@ if(list==null){
    				<td width=30%>bookname</td>
    				<td width=30%>price</td>
    				<td>author</td>
-                <td>kind</td>
-                <td>seller</td>
+                                <td>kind</td>
+                                <td>seller</td>
    			
    			</tr>
                         
@@ -108,14 +111,13 @@ if(list==null){
    				for(Map<String,Object> map :list){%>
    			
    				<tr align="center">
-   				<td width=10%><input type="checkbox" name="ids" value="<%=map.get("bookname")%>"/></td>
+   				<td width=10%><input type="checkbox" name="ids" value="<%=map.get("bookid") %>"/></td>
    				<td width=30%><%=map.get("bookname") %></td>
    				<td width=30%><%=map.get("bookprice") %></td>
    				<td><%=map.get("bookauthor") %></td>
-                <td><%=map.get("bookkind") %></td>
-                <td><%=map.get("bookseller") %></td>
-				
-				<%}
+                                <td><%=map.get("bookkind") %></td>
+                                <td><%=map.get("bookseller") %></td>
+   				<%}
    			
    			
    			}else{%>
@@ -124,19 +126,19 @@ if(list==null){
    				<td width=10%><input type="checkbox" name="" /></td>
    				<td width=30%></td>
    				<td width=30%></td>
-				<td width=30%></td>
-   				<td width=30%></td>
    				<td></td>
    			
    			</tr><%
    			
    			}   			
    			 %>
+   			
    	
    			
    		
    		</table>
-		   <td><input width = 10% type = "hidden" name = "username" value = "<%=username%>"readonly/></td>   		
+                            
+                <td><input type = "hidden" name = "username" value = "<%=username%>" readonly/></td>  
    		</form>
    		</td>
    	
@@ -146,7 +148,7 @@ if(list==null){
    		<td>
    			
    			<button type="button" onclick="javascript:view();" >view</button>
-            <button type="button" onclick="javascript:addToCart();" >addtocart</button>
+                        <button type="button" onclick="javascript:addToCart();" >addtocart</button>
                         
    		
    		</td>
@@ -185,7 +187,7 @@ if(list==null){
 		th.action="<%=path%>/servlet/ProductAction?action_flag=edsearch";
 		th.submit();
 	}
-        function Literature(){
+        function literature(){
 		var th = document.form2;
 		th.action="<%=path%>/servlet/ProductAction?action_flag=lisearch";
 		th.submit();
@@ -238,7 +240,7 @@ if(list==null){
 		}
 		
 		var th = document.form1;
-		th.action="<%=path%>/servlet/CProductAction?action_flag=view&bookname="+getSelectedValue();
+		th.action="<%=path%>/servlet/CProductAction?action_flag=view&bookid="+getSelectedValue();
 		th.submit();		
 	
 	}
@@ -253,7 +255,7 @@ if(list==null){
 		}
 		
 		var th = document.form1;
-		th.action="<%=path%>/servlet/CProductAction?action_flag=addtocart&bookname="+getSelectedValue();
+		th.action="<%=path%>/servlet/CProductAction?action_flag=addtocart&bookid="+getSelectedValue();
 		th.submit();		
 	
 	}
@@ -266,8 +268,21 @@ if(list==null){
 		th.action="<%=path%>/servlet/CProductAction?action_flag=rank";
 		th.submit();
 	}
+        
+        function mytrade(){
+            
+            var th=document.form2;
+            
+            th.action="<%=path%>/servlet/CProductAction?action_flag=mytrade";
+            th.submit();
+        }
 	
-	
+	function shoppingCart(){
+            var th=document.form2;
+            
+            th.action="<%=path%>/servlet/CProductAction?action_flag=viewShoppingCart";
+            th.submit();
+        }
         
         function logout(){
 	

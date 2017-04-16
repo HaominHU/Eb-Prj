@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%
 String path = request.getContextPath();
+String username = (String)session.getAttribute("username");
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
@@ -22,16 +23,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript">
 function dosubmit(){
 	var th = document.form1;
-        if(th.proprice.value<0){
+        if(th.bookprice.value<0){
             
             alert("wrong price");  
             return ; 
          }
-         if(th.proinv.value<=0){
-            
-            alert("wrong inventory");  
-            return ; 
-          }
+        
+          
  
 	th.action="<%= path%>/servlet/ProductAction?action_flag=add";
 	th.submit();
@@ -45,26 +43,39 @@ function dosubmit(){
 	<div align="center">
 	
 		<table width=70% style="margin:auto;">
-			<tr><td align="center" height=150 valign="bottom">New product info</td></tr>
+			<tr><td align="center" height=150 valign="bottom">New book info</td></tr>
 			<tr>
 				<td>
 					<form id="form1" name="form1" action="" method="post" enctype="multipart/form-data">
 					<table border=1 style="margin:auto">
 						<tr >
-							<td>Product name</td>
-							<td><input type="text" name="proname" id="proname"/></td>
-							<td>Product price</td>
-							<td><input type="text" name="proprice" id="proprice"/></td>
+							<td>Book name</td>
+							<td><input type="text" name="bookname" id="bookname"/></td>
+                                                        <td>Book author</td>
+							<td><input type="text" name="bookauthor" id="bookauthor"/></td>
+							<td>Book price</td>
+							<td><input type="text" name="bookprice" id="proprice"/></td>
 						</tr>
 						<tr>
-							<td>Product inventory</td>
-							<td colspan="3"><input type="text" name="proinv" id="proinv"/></td>
+							<td>book introduction</td>
+							<td colspan="3"><input type="text" name="bookintro" id="bookintro"/></td>
+                                                        
 						</tr>
                                                 <tr>
 							<td>Type</td>
-							<td colspan="3"><input type="text" name="prokind" id="prokind"/></td>
+                                                        <td>
+                                                            <select name="bookkind">
+                                                                <option value="volvo">Volvo</option>
+                                                                <option value="saab">Saab</option>
+                                                                <option value="fiat">Fiat</option>
+                                                                <option value="audi">Audi</option>
+                                                            </select>
+
+                                                        </td>
+							<!--<td colspan="3"><input type="text" name="bookkind" id="bookkind"/></td>-->
 						</tr>
 					</table> 
+                                            <td><input type = "hidden" name = "bookseller" value = "<%=username%>" readonly/></td>
 					</form>   				
 				
 				</td>

@@ -120,7 +120,7 @@ public class JdbcUtils {
 		pstmt = connection.prepareStatement(sql);
                 pstmt.setObject(1, params.get(1));
                 pstmt.setObject(2, params.get(0));                
-               result = pstmt.executeUpdate();
+                result = pstmt.executeUpdate();
                 flag = result > 0 ? true : false;
 		return flag;
 
@@ -311,6 +311,15 @@ public class JdbcUtils {
 		return list;
 	}
 	
+        public void insert(String sql) throws SQLException {
+            stmt = connection.createStatement();
+            String sql1=sql;
+            int result=-1;
+            result=stmt.executeUpdate(sql);
+            
+            
+        }
+        
 	/**关闭数据库访问
 	 * @throws SQLException
 	 */

@@ -62,6 +62,7 @@ String username = (String)session.getAttribute("username");
                                             <td>kind</td>
                                             <td>Amount</td>
                                             
+                                            
                                         </tr>
                                        
    			<%
@@ -77,9 +78,9 @@ String username = (String)session.getAttribute("username");
                                         <td><%=map.get("bookauthor") %></td>
                                         <td><%=map.get("bookkind") %></td>
                                         <td><%=map.get("number") %></td>
-                                        <!--<td><input type = "hidden" name = "proname" value = "<%=map.get("bookname")%>"readonly/></td>
+                                        <td><input type = "hidden" name = "proname" value = "<%=map.get("bookname")%>"readonly/></td>
                                         <td><input type = "hidden" name = "proquantity" value = "<%=map.get("number")%>"readonly/></td>
-                                        <td><input type = "hidden" name = "proinv" value = "<%=map.get("bookauthor")%>" readonly/></td>-->
+                                        <td><input type = "hidden" name = "proinv" value = "<%=map.get("bookauthor")%>" readonly/></td>
                                         
                                 
 
@@ -101,9 +102,9 @@ String username = (String)session.getAttribute("username");
                         
                 
                                 <!--</table>--> 
-                                
+                                <tr>
                                     <td><input width = 10% type = "hidden" name = "username" value = "<%=username%>"readonly/></td>
-                                
+                                </tr>
                                
                                
                                 

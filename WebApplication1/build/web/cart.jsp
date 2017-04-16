@@ -60,7 +60,7 @@ String username = (String)session.getAttribute("username");
                                             <td width=30%>BookPrice</td>
                                             <td width=30%>BookKind</td>
                                             <td width=30%>Amount</td>
-
+                                            <td>Price</td>
                                             
                                         </tr>
                                        
@@ -78,8 +78,9 @@ String username = (String)session.getAttribute("username");
                                         <td><%=map.get("number") %></td>
                                         <td><input type = "hidden" name = "bookname" value = "<%=map.get("bookname")%>"readonly/></td>
                                         <td><input type = "hidden" name = "bookquantity" value = "<%=map.get("number")%>"readonly/></td>
-                                        <td><input type = "hidden" name = "bookid" value = "<%=map.get("bookid")%>" readonly/></td>
-                                    </tr>  
+                                        <td><input type = "hidden" name = "bookid" value = "<%=map.get("bookid")%>"readonly/></td>
+                                        
+                                        
                                 <%
                                   Object a=map.get("bookprice");
                                   int c = Integer.parseInt(a==null?"":a.toString());
@@ -88,7 +89,7 @@ String username = (String)session.getAttribute("username");
                                   int t = 0;
                                   
                                   t =c*d;
-                                  //out.print("<td>"+t+"</td>");
+                                  out.print("<td>"+t+"</td>");
                                   sum += t;
                                 %>
 
@@ -122,6 +123,7 @@ String username = (String)session.getAttribute("username");
                                 <tr>
                                      <td width = 15%><input type = "text" name = "sum" style = "border-style:none" value = "<%out.print(sum);%>"readonly/></td>
                                 </tr>
+<!--                                 out.print("<td>"+sum+"</td>");-->
                                 <tr>
                                     <td>
                                          <tr>

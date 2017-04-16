@@ -289,39 +289,13 @@ public class OrderAction extends HttpServlet{
                 String[] bookname=request.getParameterValues("bookname");
                 String[] bookquantity=request.getParameterValues("bookquantity");
                 
-                // for(int i=0;i<proquantity.length;i++){
-                //     boolean flag2=(Integer.parseInt( proquantity[i])>Integer.parseInt(proinv[i]));
-                //     if(flag2){
-
-                //         response.sendRedirect(path+"/outOfStock.jsp");
-                //         return;
-                //     }
-                // }
                                 
 		String key = UUIDTools.getUUID();
                 params1.add(key); // 参数传 product表的主键
                 params1.add(username);
                 params1.add(sum);
 		try {
-			//解析request的请求
-//			list = servletFileUpload.parseRequest(request);				
-//			//取出所有表单的值，判断非文本字段和文本字段
-//			for(FileItem fileItem : list){
-//				if (fileItem.isFormField()) {//是文本字段
-//					String fileItemName = fileItem.getFieldName(); //获取 <input>控件的 名称
-//					String fileItemValue = fileItem.getString("utf-8");//获取<input>控件的值
-//				if (fileItemName.equals("oid")) {
-//						params.add(fileItemValue); //参数传入 proname
-//					}else if (fileItemName.equals("username")) {
-//						params.add(fileItemValue);//参数传入 proprice
-//					}else if (fileItemName.equals("total")) {
-//						params.add(fileItemValue);////参数传入 proinv
-//					}else if (fileItemName.equals("time")) {
-//						params.add(fileItemValue);////参数传入 prokind
-//					}		
-//                                        
-//				}
-//			}
+		
                         for(int i = 0; i<bookname.length; i++){
                             List<Object> params = new ArrayList<Object>();
                             params.add(key);
@@ -333,7 +307,8 @@ public class OrderAction extends HttpServlet{
 			// 把产品加入数据库
 			boolean flag1 = service.addOrder(params1);
 			if (flag1) {
-				delSell(request,response);
+				
+                            delSell(request,response);
 				//response.sendRedirect(path+"/Cmain.jsp");
 			}
 				
@@ -343,11 +318,11 @@ public class OrderAction extends HttpServlet{
 			e.printStackTrace();
 		}
         }
-
-		private void delSell(HttpServletRequest request, HttpServletResponse response){
+        
+        private void delSell(HttpServletRequest request, HttpServletResponse response){
 				String[] ids = request.getParameterValues("bookid");
-				String[] ids2 = request.getParameterValues("bookname");
-				boolean flag = service.delSell(ids,ids2);
+				//String[] ids2 = request.getParameterValues("bookname");
+				boolean flag = service.delSell(ids);
 				if (flag) {
 					try {
 						request.getRequestDispatcher("/Cmain.jsp").forward(request, response);
@@ -358,19 +333,6 @@ public class OrderAction extends HttpServlet{
 					}
 				}
 		}
-
-		// private void delSc(HttpServletRequest request, HttpServletResponse response){
-		// 	String[] ids = request.getParameterValues("bookname");
-		// 	boolean flag = service.delSc(ids);
-		// 	if(flag){
-		// 		try{
-		// 			request.getRequestDispatcher("/Cmain.jsp").forward(request,response);
-		// 		}
-		// 		catch(Exception e){
-		// 			e.printStackTrace();
-		// 		}
-		// 	}
-		// }
         
         private void addDetail(HttpServletRequest request, HttpServletResponse response) 
                 throws ServletException, IOException{
