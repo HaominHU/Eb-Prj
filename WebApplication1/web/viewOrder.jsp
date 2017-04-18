@@ -48,11 +48,10 @@ List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("
    	 	<form name="form1" action="" method="post">
    		<table border=1 width=100%>
    			<tr align="center">
-   				<!--<td width=10%><input type="checkbox" name="checkall" onclick="javascript:selectAll(this.checked);" /></td>-->
+   				
    				<td width=30%>name</td>
    				<td width=30%>quantity</td>
-                                <!--<td width=30%>PRICE</td>-->
-   				<!--<td>KIND</td>-->
+                                
    			
    			</tr>
    			<%
@@ -61,12 +60,9 @@ List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("
    				for(Map<String,Object> map :list){%>
    			
    				<tr align="center">
-   				<!--<td width=10%><input type="checkbox" name="ids" value="<%=map.get("proid") %>"/></td>-->
    				<td width=30%><%=map.get("bookname") %></td>
    				<td width=30%><%=map.get("bookquantity") %></td>
-                                <!--<td width=30%><%=map.get("proprice") %></td>-->
-   				<!--<td><%=map.get("prokind") %></td>-->
-   				
+                              
    				<%}
    			
    			
@@ -75,8 +71,7 @@ List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("
    			<tr align="center">
    				<td width=10%><input type="checkbox" name="" /></td>
    				<td width=30%></td>
-   				<!--<td width=30%></td>-->
-                                <!--<td width=30%></td>-->
+   				
    				<td></td>
    			
    			</tr><%
@@ -92,7 +87,7 @@ List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("
                         
   			<tr>
   				<td align="center">
-  					<!--<button type="button" onclick="javascript:location.href='<%=path %>/main.jsp'">Submit</button>-->
+  					
   					<button type="button" onclick="javascript:history.go(-1)">Back</button>
   				</td>
   			</tr>

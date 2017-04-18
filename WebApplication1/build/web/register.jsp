@@ -46,8 +46,6 @@ function dosubmit(){
             return ;
         }
         
-        
-        
         var phone = th.phone.value;
          if(!phone.match(/^\d{10}/)) {
             alert("wrong phone number.");  
@@ -58,7 +56,7 @@ function dosubmit(){
 
 }
 function back(){
- 	alert("Back to home page");
+ 	
 	th = document.form1;
 	th.acton="<%=path%>/index.jsp";
 	th.submit;
@@ -80,18 +78,18 @@ function back(){
    	<tr>
    		<td>Username:</td>
    		<td><input type="text" name="username"></input></td>  
-   		<td>Must fill this blank.</td> 		
+   		
    	</tr>
    	<tr>
    		<td>Password:</td>
    		<td><input type="password" name="pswd"></input></td>  
-   		<td>Must fill this blank.</td>  		
+   		  		
    		
    	</tr>
         <tr>
    		<td>Your name:</td>
    		<td><input type="text" name="name"></input></td>  
-                <td>Must fill this blank.</td>                 
+                                
    	</tr>
         <tr>
    		<td>Email Address:</td>

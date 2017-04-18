@@ -7,16 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 String username = (String)session.getAttribute("username");
 List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("listOrder");
 
-list= null;
-DividePage dividePage = (DividePage) request.getAttribute("dividePage");
-if(list==null){
-	OrderService service = new OrderDao();
-	int totalRecord = service.getItemCount("");
-	dividePage = new DividePage(20,totalRecord,1);
-	int start = dividePage.fromIndex();
-	int end = dividePage.toIndex();
-	list = service.listOrder(username, start, end);
-}
+
 	
 %>
 
@@ -42,33 +33,6 @@ if(list==null){
 		th.submit();
 	}
 	
-	function first(){
-		
-		window.location.href = "<%=path%>/servlet/OrderAction?action_flag=search&pageNum=1";
-		
-	}
-	function next(){
-		
-		window.location.href = "<%=path%>/servlet/OrderAction?action_flag=search&pageNum=<%=dividePage.getCurrentPage()+1%>";		
-	
-	}
-	function forward(){
-		
-		window.location.href = "<%=path%>/servlet/OrderAction?action_flag=search&pageNum=<%=dividePage.getCurrentPage()-1%>";
-		
-	}
-	function end(){
-		
-		window.location.href = "<%=path%>/servlet/OrderAction?action_flag=search&pageNum=<%=dividePage.getPageCount() %>";
-			
-	}
-	
-	function changePage(currentPage){
-	
-		window.location.href = "<%=path%>/servlet/OrderAction?action_flag=search&pageNum="+currentPage;
-	
-	}
-	 
 	function selectAll(flag){
 		
 		var ids = document.getElementsByName("ids");
@@ -136,12 +100,7 @@ if(list==null){
 		th.submit();		
 	
 	}
-	/*
-	function logout(){
 	
-	window.location.href="<%=path %>/servlet/LogoutAction?action_flag=logout";
-		
-	}*/
 	
 	
 	</script>
@@ -198,13 +157,7 @@ if(list==null){
    				<td width=15%></td>
    				<td width=15%></td>
                 <td width=15%></td>
-<!--                                <td width=15%></td>
-                                <td width=15%></td>
-   				<td width=15%></td>
-                                <td width=15%></td>
-                                <td width=15%></td>-->
-                                <!--<td width=15%></td>-->
-   				<!--<td></td>-->
+                               
    			
    			</tr><%
    			
@@ -222,8 +175,7 @@ if(list==null){
    	
    	<tr>
    		<td>
-<!--   			<button type="button" onclick="javascript:del();">delete</button>-->
-<!-- 			<button type="button" onclick="javascript:del();">delete</button>-->
+
    			<button type="button" onclick="javascript:view();" >view</button>
    		
    		</td>
@@ -231,46 +183,16 @@ if(list==null){
    	
         
         
-<!--   	<tr>
-   		<td colspan="4" align="center">
-   			<%=dividePage.getPageCount()  %> pages
-   			<a href="javascript:first();">First page</a>   
-   			<a href="javascript:forward();">Previous page</a> 
-   			<a href="javascript:next();">Next page</a> 
-   			<a href="javascript:end();">Last page</a> 
-   			To<select name="select" onchange="changePage(this.value)">
-   			
-   			<%
-   			int pageCount = dividePage.getPageCount();
-   			if(pageCount>0){
-   			for(int i = 1 ; i<=pageCount;i++){%>
-   			
-   			<option value="<%=i %>" <%= (i==dividePage.getCurrentPage()?"selected":"")%>>  <%=i %>
-   			</option>
-   			
-   			<%			
-   			}
-   			}else{
-   				%>
-   				<option value="1">1</option>   
-   			 <%}			
-   			
-   			%> 
-   					
-   			</select>
-   		
-   		</td>
-   	</tr>-->
+
         
         <tr>
                 <td colspan="2" align="center">
-   				<!-- <button type="button" onclick="searchProduct()" >search</button>-->
+   				
                 <br>
                 <br>
-   				<button type="button" style="width: 65px; height: 25px;"onclick="javascript:location.href='<%=path %>/Cmain.jsp'">finish</button>
-                <!--<span width = 30%></span>-->
-   			 	<!--<button type="button" style="width: 65px; height: 25px;"onclick="javascript:location.href='<%=path %>/updateOrder.jsp'">update</button>-->  
-   				</td>   				
+   			<button type="button" style="width: 65px; height: 25px;"onclick="javascript:location.href='<%=path %>/Cmain.jsp'">finish</button>
+               
+   		</td>   				
         </tr>    
    </table>
 

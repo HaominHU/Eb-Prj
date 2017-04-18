@@ -1,6 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ page import="com.util.*" %>
-<%@ page import="com.product.*" %>
 <%@ page import="com.Cproduct.*" %>
 
 <%
@@ -101,7 +100,7 @@ String username = (String)session.getAttribute("username");
    			 %>
                         
                 
-                                <!--</table>--> 
+                                
                                 <tr>
                                     <td><input width = 10% type = "hidden" name = "username" value = "<%=username%>"readonly/></td>
                                 </tr>

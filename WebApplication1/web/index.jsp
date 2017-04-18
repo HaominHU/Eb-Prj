@@ -69,7 +69,7 @@ function Clogin(){
    		
    		<td colspan="2" align="center">
    		<button type="button" name="" value="" onclick="Clogin()">Login</button>
-                <!--<button type="button" name="" value="" onclick="login()">AdminLogin</button>-->
+                
    		<button type="button" name="" value="" onclick="javascript:location.href='register.jsp'">Register</button>
    		</td>   		
    	</tr>   

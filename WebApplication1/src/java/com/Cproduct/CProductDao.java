@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import com.jdbc.JdbcUtils;
 
 public class CProductDao implements CProductService {
@@ -20,13 +19,14 @@ public class CProductDao implements CProductService {
 		boolean flag = false;
 		try {
 			jdbcUtils.getConnection();
-			String sql = "insert into product(proid,proname,proprice,proaddress,proimage) values(?,?,?,?,?)";
+			String sql = "insert into book(bookid,bookname,bookauthor,bookprice,bookintro,bookkind,bookseller) values(?,?,?,?,?,?,?)";
 			flag = jdbcUtils.updateByPreparedStatement(sql, params);
 		} catch (Exception e) {
+			
 			e.printStackTrace();
 		}finally{
 			
-			// close
+			
 			jdbcUtils.releaseConn();
 			
 		}
@@ -34,6 +34,7 @@ public class CProductDao implements CProductService {
 		
 		return flag;
 	}
+
 
 	@Override
 	public List<Map<String, Object>> listProduct(String bookname) {
@@ -90,7 +91,6 @@ public class CProductDao implements CProductService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			
 			
 			jdbcUtils.releaseConn();
 			
@@ -168,7 +168,6 @@ public class CProductDao implements CProductService {
 			jdbcUtils.releaseConn();
 		}
 		
-		
 		return map;
 	}
         
@@ -195,11 +194,7 @@ public class CProductDao implements CProductService {
 					System.out.println(sql);
 				}
                                 map = jdbcUtils.findMoreResult2(sql);
-                                
-                                
-                                 
-                                
-                                
+                                          
             }
             }
             
@@ -221,11 +216,10 @@ public class CProductDao implements CProductService {
 			String sql = "insert into shopcart(scid,susername) values(?,?)";
 			flag = jdbcUtils.updateByPreparedStatement(sql, params);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			e.printStackTrace();
 		}finally{
 			
-			// 关闭数据库连接
 			jdbcUtils.releaseConn();
 			
 		}
@@ -263,7 +257,6 @@ public class CProductDao implements CProductService {
 			jdbcUtils.releaseConn();
 		}
 		
-		
 		return map;
 	}
 
@@ -272,21 +265,48 @@ public class CProductDao implements CProductService {
             List<Map<String, Object>> list = null;
             try {
 			jdbcUtils.getConnection();
-			//List<Object> params = new ArrayList<Object>();
+			
 			String sql = "select * from book where bookseller = ?";
-			//map = jdbcUtils.findSimpleResult(sql, params);
+			
 			list = jdbcUtils.findMoreResult(sql, params);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			e.printStackTrace();
 		} finally{
-			// 关闭数据库连接
+		
 			jdbcUtils.releaseConn();
 		}
 		
 		
 		return list;
         }
+        
+
+        
+        @Override
+	public List<Map<String, Object>> viewOrder(String username) {
+		
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		List<Object> params  = new ArrayList<Object>();		
+		try {
+			jdbcUtils.getConnection();			
+			String sql = "select * from ord where username = ? ";	
+                        params.add(username);
+						
+			list = jdbcUtils.findMoreResult(sql, params);			
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		} finally{
+			
+			jdbcUtils.releaseConn();
+			
+		}
+		
+		
+		return list;
+	}
         
         @Override
         public List<Map<String,Object>> viewShoppingCart(List<Object> params){
@@ -298,10 +318,10 @@ public class CProductDao implements CProductService {
 			
 			list = jdbcUtils.findMoreResult(sql, params);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			e.printStackTrace();
 		} finally{
-			// 关闭数据库连接
+			
 			jdbcUtils.releaseConn();
 		}
 		
@@ -312,7 +332,7 @@ public class CProductDao implements CProductService {
         
         @Override
         public List<Map<String, Object>> kindSearch(String booktype) {
-		// TODO Auto-generated method stub
+		
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		List<Object> params  = new ArrayList<Object>();		
 		try {
@@ -330,10 +350,9 @@ public class CProductDao implements CProductService {
 			list = jdbcUtils.findMoreResult(sql, params);			
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			e.printStackTrace();
 		} finally{
-			
 			
 			jdbcUtils.releaseConn();
 			
@@ -341,6 +360,33 @@ public class CProductDao implements CProductService {
 		
 		
 		return list;
+	}
+        
+         @Override
+	public boolean del(String[] ids){
+		boolean flag = false;
+
+		try{
+			jdbcUtils.getConnection();
+			if(ids!=null){
+				
+				String[] sql = new String[ids.length];
+				for(int i = 0 ; i< ids.length; i++){
+					sql[i] = "delete from book where bookid = '"+ids[i]+"'";
+				
+				}
+				flag = jdbcUtils.deleteByBatch(sql);
+
+			}
+		}catch (Exception e) {
+			
+			e.printStackTrace();
+		} finally{
+		
+			jdbcUtils.releaseConn();
+		}	
+		
+		return flag;
 	}
 	
 }

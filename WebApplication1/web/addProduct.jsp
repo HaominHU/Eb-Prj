@@ -29,9 +29,7 @@ function dosubmit(){
             return ; 
          }
         
-          
- 
-	th.action="<%= path%>/servlet/ProductAction?action_flag=add";
+	th.action="<%= path%>/servlet/CProductAction?action_flag=add";
 	th.submit();
 
 }
@@ -46,7 +44,8 @@ function dosubmit(){
 			<tr><td align="center" height=150 valign="bottom">New book info</td></tr>
 			<tr>
 				<td>
-					<form id="form1" name="form1" action="" method="post" enctype="multipart/form-data">
+                                    <form id="form1" name="form1" action="" method="post" >        
+                                        
 					<table border=1 style="margin:auto">
 						<tr >
 							<td>Book name</td>
@@ -54,7 +53,7 @@ function dosubmit(){
                                                         <td>Book author</td>
 							<td><input type="text" name="bookauthor" id="bookauthor"/></td>
 							<td>Book price</td>
-							<td><input type="text" name="bookprice" id="proprice"/></td>
+							<td><input type="text" name="bookprice" id="bookprice"/></td>
 						</tr>
 						<tr>
 							<td>book introduction</td>
@@ -65,14 +64,14 @@ function dosubmit(){
 							<td>Type</td>
                                                         <td>
                                                             <select name="bookkind">
-                                                                <option value="volvo">Volvo</option>
-                                                                <option value="saab">Saab</option>
-                                                                <option value="fiat">Fiat</option>
-                                                                <option value="audi">Audi</option>
+                                                                <option value="novel">Novel</option>
+                                                                <option value="education">Education</option>
+                                                                <option value="literature">Literature</option>
+                                                                
                                                             </select>
 
                                                         </td>
-							<!--<td colspan="3"><input type="text" name="bookkind" id="bookkind"/></td>-->
+							
 						</tr>
 					</table> 
                                             <td><input type = "hidden" name = "bookseller" value = "<%=username%>" readonly/></td>

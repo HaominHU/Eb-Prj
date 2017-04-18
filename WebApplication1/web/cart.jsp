@@ -1,6 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ page import="com.util.*" %>
-<%@ page import="com.product.*" %>
 <%@ page import="com.Cproduct.*" %>
 
 <%
@@ -46,16 +45,16 @@ String username = (String)session.getAttribute("username");
                         
                          <tr>
                                 <td>
-                                    <HR width="200" color=#987cb9 SIZE="5" /><!-- color颜色，size大小 -->
+                                    <HR width="200" color=#987cb9 SIZE="5" />
                                                 
                                 </td>
                         </tr>
   			<tr>
   				<td >
                                     <form name="form1" action="" method="post">
-<!--                                    <table border=1 width=100%>-->
+                                    
                                         <tr align="center">
-<!--   				<td width=10%><input type="checkbox" name="checkall" onclick="javascript:selectAll(this.checked);" /></td>-->
+   				
                                             <td width=30%>BookName</td>
                                             <td width=30%>BookPrice</td>
                                             <td width=30%>BookKind</td>
@@ -110,7 +109,7 @@ String username = (String)session.getAttribute("username");
    			 %>
                         
                 
-                                <!--</table>--> 
+                                
                                 <tr>
                                     <td><input width = 10% type = "hidden" name = "username" value = "<%=username%>"readonly/></td>
                                 </tr>
@@ -123,7 +122,7 @@ String username = (String)session.getAttribute("username");
                                 <tr>
                                      <td width = 15%><input type = "text" name = "sum" style = "border-style:none" value = "<%out.print(sum);%>"readonly/></td>
                                 </tr>
-<!--                                 out.print("<td>"+sum+"</td>");-->
+                                
                                 <tr>
                                     <td>
                                          <tr>

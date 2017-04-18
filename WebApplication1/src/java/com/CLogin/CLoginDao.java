@@ -4,13 +4,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.Flags.Flag;
-
+//import javax.mail.Flags.Flag;
 import com.jdbc.JdbcUtils;
-/**
- *
- * @author lenovo
- */
+
+
 public class CLoginDao implements CLoginService{
  
 	private JdbcUtils jdbcUtils;
@@ -29,11 +26,10 @@ public class CLoginDao implements CLoginService{
 			flag = !map.isEmpty()?true:false;			
 			
 		} catch (Exception e) {
-			//  exception
+			
 			e.printStackTrace();
 		}finally{
 			
-		//close db
 		jdbcUtils.releaseConn();
 			
 		}

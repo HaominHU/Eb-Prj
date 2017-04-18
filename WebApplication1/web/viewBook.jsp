@@ -63,7 +63,7 @@ Map<String,Object> map = (Map<String,Object>)request.getAttribute("bookDetail");
   			</tr>
   			<tr>
   				<td align="center">
-  					<!--<button type="button" onclick="javascript:location.href='<%=path %>/main.jsp'">Submit</button>-->
+  					
   					<button type="button" onclick="javascript:history.go(-1)">Back</button>
   				</td>
   			</tr>

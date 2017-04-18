@@ -13,49 +13,49 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mysql.jdbc.Driver;
+//import com.mysql.jdbc.Driver;
 
 public class JdbcUtils {
 
-	// 定义数据库的用户名
+	
 	private final String USERNAME = "root";
-	// 定义数据库的密码
+	
 	private final String PASSWORD = "root";
-	// 定义数据库的驱动信息
+	
 	private final String DRIVER = "com.mysql.jdbc.Driver";
-	// 定义访问数据库的地址
+	
 	private final String URL = "jdbc:mysql://localhost:8889/usedBookStore?zeroDateTimeBehavior=convertToNull";
 
-	// 定义访问数据库的连接
+	
 	private Connection connection;
-	// 定义sql语句的执行对象
+	
 	private PreparedStatement pstmt;
-	// 定义查询返回的结果集合
+	
 	private ResultSet resultSet;
 	
-	// 实现批处理的功能
+	
 	private Statement stmt;
 
 	public JdbcUtils() {
-		// TODO Auto-generated constructor stub
+		
 		try {
 			Class.forName(DRIVER);
-			System.out.println("注册驱动成功！！");
+			System.out.println("success");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.out.println("注册驱动失败！！");
+			
+			System.out.println("failure");
 		}
 
 	}
 
-	// 定义获得数据库的连接
+	
 	public Connection getConnection() {
 
 		try {
 			connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			System.out.println("Connection exception !");
 		}
 
@@ -65,15 +65,11 @@ public class JdbcUtils {
 	
 	
 	
-	/** 实现批处理删除
-	 * @param sql
-	 * @return
-	 * @throws SQLException
-	 */
+	
 	public boolean deleteByBatch(String[] sql) throws SQLException{
 		boolean flag = false;
 		stmt = connection.createStatement();
-		if (sql!=null) { //判断数组是否为空，不能用length来判断，否则可能会报空指针异常。
+		if (sql!=null) { 
 			
 			for(int i = 0 ; i<sql.length ; i++){
 				stmt.addBatch(sql[i]);
@@ -87,23 +83,16 @@ public class JdbcUtils {
 		return flag;		
 	}
 
-	/**
-	 * 完成对数据库标的增加删除和修改的操作
-	 * 
-	 * @param sql
-	 * @param params
-	 * @return
-	 * @throws SQLException
-	 */
+	
 	public boolean updateByPreparedStatement(String sql, List<Object> params)
 			throws SQLException {
 		boolean flag = false;
-		int result = -1;// 表示当用户执行增加删除和修改的操作影响的行数
-		int index = 1; // 表示 占位符 ，从1开始
+		int result = -1;
+		int index = 1; 
 		pstmt = connection.prepareStatement(sql);
 		if (params != null && !params.isEmpty()) {
 			for (int i = 0; i < params.size(); i++) {
-				pstmt.setObject(index++, params.get(i)); // 填充占位符
+				pstmt.setObject(index++, params.get(i)); 
 			}
 		}
 
@@ -113,27 +102,20 @@ public class JdbcUtils {
 
 	}
         
-        public boolean updateByPreparedStatement1(String sql, List<Object> params)
-			throws SQLException {
-		boolean flag = false;
-		int result = -1;// 表示当用户执行增加删除和修改的操作影响的行数                
-		pstmt = connection.prepareStatement(sql);
-                pstmt.setObject(1, params.get(1));
-                pstmt.setObject(2, params.get(0));                
-                result = pstmt.executeUpdate();
-                flag = result > 0 ? true : false;
-		return flag;
+//        public boolean updateByPreparedStatement1(String sql, List<Object> params)
+//			throws SQLException {
+//		boolean flag = false;
+//		int result = -1;               
+//		pstmt = connection.prepareStatement(sql);
+//                pstmt.setObject(1, params.get(1));
+//                pstmt.setObject(2, params.get(0));                
+//                result = pstmt.executeUpdate();
+//                flag = result > 0 ? true : false;
+//		return flag;
+//
+//	}
 
-	}
-
-	/**
-	 * 查询返回单条记录
-	 * 
-	 * @param sql
-	 * @param params
-	 * @return
-	 * @throws SQLException
-	 */
+	
 	public  Map<String, Object> findSimpleResult(String sql, List<Object> params)
 			throws SQLException {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -144,15 +126,15 @@ public class JdbcUtils {
 				pstmt.setObject(index++, params.get(i));
 			}
 		}
-		resultSet = pstmt.executeQuery(); // 返回查询结果
+		resultSet = pstmt.executeQuery(); 
 
-		ResultSetMetaData metaData = pstmt.getMetaData(); // 获取 结果中，一行所有列的结果
-		int cols_len = metaData.getColumnCount(); // 获得列的总数
+		ResultSetMetaData metaData = pstmt.getMetaData(); 
+		int cols_len = metaData.getColumnCount(); 
 
 		while (resultSet.next()) {
 			for (int i = 0; i < cols_len; i++) {
-				String col_name = metaData.getColumnName(i + 1); // 获得第i列的字段名称
-				Object col_value = resultSet.getObject(col_name);// 返回 第i列的内容值
+				String col_name = metaData.getColumnName(i + 1); 
+				Object col_value = resultSet.getObject(col_name);
 				if (col_value == null) {
 					col_value = "";
 				}
@@ -168,16 +150,16 @@ public class JdbcUtils {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		pstmt = connection.prepareStatement(sql);
 		
-		resultSet = pstmt.executeQuery(sql); // 返回查询结果集合
-		ResultSetMetaData metaData = resultSet.getMetaData(); // 获得列的结果
+		resultSet = pstmt.executeQuery(sql); 
+		ResultSetMetaData metaData = resultSet.getMetaData(); 
 
 		while (resultSet.next()) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			int cols_len = metaData.getColumnCount(); // 获取总的列数
+			int cols_len = metaData.getColumnCount(); 
 			for (int i = 0; i < cols_len; i++) {
-				String col_name = metaData.getColumnName(i + 1); // 获取第 i列的字段名称
-                                // ,列计算从1开始
-				Object col_value = resultSet.getObject(col_name); // 获取第i列的内容值
+				String col_name = metaData.getColumnName(i + 1); 
+                                
+				Object col_value = resultSet.getObject(col_name); 
 				if (col_value == null) {
 					col_value = "";
 				}
@@ -188,34 +170,27 @@ public class JdbcUtils {
 		return list;
 	}
 
-	/**
-	 * 查询返回多条记录
-	 * 
-	 * @param sql
-	 * @param params
-	 * @return
-	 * @throws SQLException
-	 */
+	
 	public List<Map<String, Object>> findMoreResult(String sql,
 			List<Object> params) throws SQLException {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		pstmt = connection.prepareStatement(sql);
-		int index = 1; // 表示占位符
+		int index = 1; 
 		if (params != null && !params.isEmpty()) {
 			for (int i = 0; i < params.size(); i++) {
 				pstmt.setObject(index++, params.get(i));
 			}
 		}
-		resultSet = pstmt.executeQuery(); // 返回查询结果集合
-		ResultSetMetaData metaData = resultSet.getMetaData(); // 获得列的结果
+		resultSet = pstmt.executeQuery(); 
+		ResultSetMetaData metaData = resultSet.getMetaData(); 
 
 		while (resultSet.next()) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			int cols_len = metaData.getColumnCount(); // 获取总的列数
+			int cols_len = metaData.getColumnCount(); 
 			for (int i = 0; i < cols_len; i++) {
-				String col_name = metaData.getColumnName(i + 1); // 获取第 i列的字段名称
-																	// ,列计算从1开始
-				Object col_value = resultSet.getObject(col_name); // 获取第i列的内容值
+				String col_name = metaData.getColumnName(i + 1); 
+														
+				Object col_value = resultSet.getObject(col_name); 
 				if (col_value == null) {
 					col_value = "";
 				}
@@ -228,107 +203,84 @@ public class JdbcUtils {
 
 	}
 
-	/**
-	 * 查询返回单个JavaBean(使用java反射机制)
-	 * 
-	 * @param sql
-	 * @param params
-	 * @param cls
-	 * @return
-	 * @throws Exception
-	 */
-	public <T> T findSimpleRefResult(String sql, List<Object> params,
-			Class<T> cls) throws Exception {
-		T resultObject = null;
-		int index = 1; // 占位符
-		pstmt = connection.prepareStatement(sql);
-		if (params != null && !params.isEmpty()) {
-			for (int i = 0; i < params.size(); i++) {
-				pstmt.setObject(index++, params.get(i)); // 填充占位符
-			}
-		}
-		resultSet = pstmt.executeQuery(); // 获取查询结果
-
-		ResultSetMetaData metaData = resultSet.getMetaData(); // 获取列的信息
-		int cols_len = metaData.getColumnCount(); // 获取总的列数
-		while (resultSet.next()) {
-			// 通过反射机制创建实例
-			resultObject = cls.newInstance(); // java反射机制
-			for (int i = 0; i < cols_len; i++) {
-				String col_name = metaData.getColumnName(i + 1); // 获取第i列的名称
-				Object col_value = resultSet.getObject(col_name); // 获取第i列的值
-				if (col_value == null) {
-					col_value = "";
-				}
-				Field field = cls.getDeclaredField(col_name);
-				field.setAccessible(true);// 打开 JavaBean的访问 private权限
-				field.set(resultObject, col_value);
-			}
-
-		}
-
-		return resultObject;
-	}
-
-	/** 查询返回多个JavaBean(通过java反射机制)
-	 * @param sql
-	 * @param params
-	 * @param cls
-	 * @return
-	 * @throws Exception
-	 */
-	public <T> List<T> findMoreRefResult(String sql, List<Object> params,
-			Class<T> cls) throws Exception {
-		List<T> list = new ArrayList<T>();
-		int index = 1; //占位符
-		pstmt = connection.prepareStatement(sql);
-		if (params != null && !params.isEmpty()) {
-			for (int i = 0; i < params.size(); i++) {
-				pstmt.setObject(index++, params.get(i));
-			}
-		}
-		resultSet = pstmt.executeQuery(); // 返回查询结果集合
-
-		ResultSetMetaData metaData = resultSet.getMetaData(); // 返回列的信息
-		int cols_len = metaData.getColumnCount(); // 结果集中总的列数
-		while (resultSet.next()) {
-			// 通过反射机制创建一个java实例
-			T resultObject = cls.newInstance();
-			for (int i = 0; i < cols_len; i++) {
-				String col_name = metaData.getColumnName(i + 1); // 获得第i列的名称
-				Object col_value = resultSet.getObject(col_name); // 获得第i列的内容
-				if (col_value == null) {
-					col_value = "";
-				}
-				Field field = cls.getDeclaredField(col_name);
-				field.setAccessible(true); // 打开JavaBean的访问private权限
-				field.set(resultObject, col_value);
-			}
-			list.add(resultObject);
-
-		}
-
-		return list;
-	}
 	
-        public void insert(String sql) throws SQLException {
-            stmt = connection.createStatement();
-            String sql1=sql;
-            int result=-1;
-            result=stmt.executeUpdate(sql);
-            
-            
-        }
+//	public <T> T findSimpleRefResult(String sql, List<Object> params,
+//			Class<T> cls) throws Exception {
+//		T resultObject = null;
+//		int index = 1; 
+//		pstmt = connection.prepareStatement(sql);
+//		if (params != null && !params.isEmpty()) {
+//			for (int i = 0; i < params.size(); i++) {
+//				pstmt.setObject(index++, params.get(i)); 
+//			}
+//		}
+//		resultSet = pstmt.executeQuery(); 
+//
+//		ResultSetMetaData metaData = resultSet.getMetaData(); 
+//		int cols_len = metaData.getColumnCount(); 
+//		while (resultSet.next()) {
+//			
+//			resultObject = cls.newInstance(); 
+//			for (int i = 0; i < cols_len; i++) {
+//				String col_name = metaData.getColumnName(i + 1); 
+//				Object col_value = resultSet.getObject(col_name); 
+//				if (col_value == null) {
+//					col_value = "";
+//				}
+//				Field field = cls.getDeclaredField(col_name);
+//				field.setAccessible(true);
+//				field.set(resultObject, col_value);
+//			}
+//
+//		}
+//
+//		return resultObject;
+//	}
+
+	
+//	public <T> List<T> findMoreRefResult(String sql, List<Object> params,
+//			Class<T> cls) throws Exception {
+//		List<T> list = new ArrayList<T>();
+//		int index = 1; 
+//		pstmt = connection.prepareStatement(sql);
+//		if (params != null && !params.isEmpty()) {
+//			for (int i = 0; i < params.size(); i++) {
+//				pstmt.setObject(index++, params.get(i));
+//			}
+//		}
+//		resultSet = pstmt.executeQuery(); 
+//
+//		ResultSetMetaData metaData = resultSet.getMetaData(); 
+//		int cols_len = metaData.getColumnCount(); 
+//		while (resultSet.next()) {
+//			
+//			T resultObject = cls.newInstance();
+//			for (int i = 0; i < cols_len; i++) {
+//				String col_name = metaData.getColumnName(i + 1); 
+//				Object col_value = resultSet.getObject(col_name); 
+//				if (col_value == null) {
+//					col_value = "";
+//				}
+//				Field field = cls.getDeclaredField(col_name);
+//				field.setAccessible(true); 
+//				field.set(resultObject, col_value);
+//			}
+//			list.add(resultObject);
+//
+//		}
+//
+//		return list;
+//	}
+	
+       
         
-	/**关闭数据库访问
-	 * @throws SQLException
-	 */
+	
 	public void releaseConn(){
 		if (resultSet!=null) {
 			try {
 				resultSet.close();
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				e.printStackTrace();
 			}
 			
@@ -338,7 +290,7 @@ public class JdbcUtils {
 			try {
 				stmt.close();
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				e.printStackTrace();
 			}
 		}
@@ -346,7 +298,7 @@ public class JdbcUtils {
 			try {
 				pstmt.close();
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				e.printStackTrace();
 			}
 		}
@@ -354,7 +306,7 @@ public class JdbcUtils {
 			try {
 				connection.close();
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				e.printStackTrace();
 			}
 		}

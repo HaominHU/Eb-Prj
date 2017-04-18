@@ -121,12 +121,12 @@
  
   <filter-mapping>
   	<filter-name>MyFilter</filter-name>
-  	<!-- /*表示过滤所有页面 ，/main.jsp 表示只过滤main.jsp页面-->
+  	
   	<url-pattern> /main.jsp</url-pattern>   
   </filter-mapping>
    <filter-mapping>
   	<filter-name>MyFilter</filter-name>
-  	<!-- /*表示过滤所有页面 /addProduct.jsp 表示只过滤addProduct.jsp页面-->
+  	
   	<url-pattern>/addProduct.jsp</url-pattern>   
   </filter-mapping>
   

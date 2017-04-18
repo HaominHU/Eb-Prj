@@ -1,25 +1,21 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ page import="com.util.*" %>
-<%@ page import="com.product.*" %>
+<%@ page import="com.Cproduct.*" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-//获取 session 中的 username;
-String username = (String)session.getAttribute("username");
-//获取从 servlet ProductActiion 中 传递的参数(数据库查询的结果)
-List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("listTrade");
-// 获取 分页对象
-DividePage dividePage = (DividePage) request.getAttribute("dividePage");
-// 获取查询的关键词
-String productName = (String) request.getAttribute("productName");
-if(list==null){
-	//第一次进 main.jsp页面，默认加载所有的产品
-	ProductService service = new ProductDao();
-	
 
-	int start = dividePage.fromIndex();
-	int end = dividePage.toIndex();
-	list = service.listProduct("");
+String username = (String)session.getAttribute("username");
+
+List<Map<String,Object>> list =(List<Map<String,Object>>) request.getAttribute("listTrade");
+
+
+if(list==null){
+	
+	CProductService service = new CProductDao();
+	List<Object> params = new ArrayList<Object>();
+        params.add(username);
+	list = service.viewMytrade(params);
 }
 	
 %>
@@ -46,9 +42,6 @@ if(list==null){
 		th.submit();
 	}
 	
-	
-	
-	 
 	function selectAll(flag){
 		
 		var ids = document.getElementsByName("ids");
@@ -81,7 +74,7 @@ if(list==null){
 		}
 		
 		var th = document.form1;
-		th.action="<%=path%>/servlet/ProductAction?action_flag=del";
+		th.action="<%=path%>/servlet/CProductAction?action_flag=del";
 		th.submit();		
 	
 	}
@@ -112,7 +105,7 @@ if(list==null){
 		}
 		
 		var th = document.form1;
-		th.action="<%=path%>/servlet/ProductAction?action_flag=view&proid="+getSelectedValue();
+		th.action="<%=path%>/servlet/CProductAction?action_flag=view";
 		th.submit();		
 	
 	}
@@ -134,33 +127,7 @@ if(list==null){
    <tr>
    		<td align="left"><font size=2>Welcome，<%=username%><br><a href="javascript:logout();">Logout</a></font></td>
    </tr>
-   	<tr>
-   		<td align="center">
-   		<form name = "form2" action="" method="post">
-   		<table>
-   			<tr>
-   				<td colspan="2">Search Product</td>
-   				
-   			</tr>
-   			<tr>
-                                <td >Product Name</td>
-   				<td ><input type="text" name="proname" value="<%= productName!=null?productName:"" %>"/></td>
-   				
-   			</tr>
-   			
-   			<tr>
-   				<td colspan="2" align="center">
-   					<button type="button" onclick="searchProduct()" >Search</button>
-   					
-   				</td>   				
-   			</tr>
-                        
-                        
-   		</table>  	
-   		</form>	
-   			
-   		</td>
-   	</tr>
+   	
    	
    	<tr>
    		<td height=50> </td>
@@ -175,10 +142,10 @@ if(list==null){
    		<table border=1 width=100%>
    			<tr align="center">
    				<td width=10%><input type="checkbox" name="checkall" onclick="javascript:selectAll(this.checked);" /></td>
-   				<td width=30%>NAME</td>
-   				<td width=30%>STORAGE</td>
-   				<td width = 30%>PRICE</td>
-                                <td>KIND</td>
+                                <td width=30%>bookname</td>
+   				<td width=30%>author</td>
+   				<td width = 30%>price</td>
+                                <td width = 30%>kind</td>
    			
    			</tr>
    			<%
@@ -189,9 +156,9 @@ if(list==null){
    				<tr align="center">
    				<td width=10%><input type="checkbox" name="ids" value="<%=map.get("bookid") %>"/></td>
    				<td width=30%><%=map.get("bookname") %></td>
-   				<td width=30%><%=map.get("bookseller") %></td>
-   				<td><%=map.get("bookprice") %></td>
-   				<td><%= map.get("bookkind")%></td>
+   				<td width=30%><%=map.get("bookauthor") %></td>
+   				<td width=30%><%=map.get("bookprice") %></td>
+   				<td width=30%><%= map.get("bookkind")%></td>
                                 
    				<%}
    			
@@ -224,23 +191,13 @@ if(list==null){
    			<button type="button" onclick="javascript:del();">Delete</button>
    			<button type="button" onclick="javascript:view();" >View</button>
                         <button type="button" onclick="javascript:location.href='<%=path %>/addProduct.jsp'">Add</button>
-                        <button type = "button" onclick = "javascript:location.href = '<%= path%>/updateProduct.jsp'">update</button>
+                        
    		
    		</td>
    	</tr>
-   	
-
-   			
-   
-   
-   
-   
    </table>
    
-   
-   
    </div>
-   
    
   </body>
 </html>

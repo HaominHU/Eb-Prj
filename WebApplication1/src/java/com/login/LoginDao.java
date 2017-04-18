@@ -12,13 +12,13 @@ public class LoginDao implements LoginService {
 
 	private JdbcUtils jdbcUtils;
 	public LoginDao() {
-		// TODO Auto-generated constructor stub
+		
 		jdbcUtils = new JdbcUtils();
 	}
 
 	@Override
 	public boolean login(List<Object> params) {
-		// TODO Auto-generated method stub
+		
 		boolean flag = false;
 		
 		try {
@@ -28,11 +28,11 @@ public class LoginDao implements LoginService {
 			flag = !map.isEmpty()?true:false;			
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			e.printStackTrace();
 		}finally{
 			
-		//关闭数据库
+		
 		jdbcUtils.releaseConn();
 			
 		}
